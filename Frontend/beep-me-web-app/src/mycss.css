@@ -2867,6 +2867,8 @@ td.mat-footer-cell {
 .mat-toolbar.mat-primary {
   background: #bfcc94;
   color: black;
+  font-weight: bold;
+  text-align: center;
 }
 .mat-toolbar.mat-accent {
   background: #ff4081;
@@ -2897,6 +2899,7 @@ td.mat-footer-cell {
 .mat-toolbar-row,
 .mat-toolbar-single-row {
   height: 64px;
+  text-align: center;
 }
 @media (max-width: 599px) {
   .mat-toolbar-multiple-rows {
@@ -2905,6 +2908,7 @@ td.mat-footer-cell {
   .mat-toolbar-row,
   .mat-toolbar-single-row {
     height: 56px;
+    text-align: center;
   }
 }
 .mat-tooltip {

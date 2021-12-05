@@ -4,6 +4,8 @@ mat-toolbar {
 
 mat-toolbar > span {
   margin-left: 10px;
+  text-align: center;
+  flex: 1 1 auto;
 }
 
 .content-wrapper {
@@ -18,7 +20,7 @@ mat-toolbar > span {
 
 .container {
   width: 400px;
-  margin: 0 25px 25px 0;
+  margin: 15px 15px 15px 15px;
 }
 
 .list {
