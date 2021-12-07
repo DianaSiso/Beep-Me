@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); 
+.main-div mat-card {
+    padding: 0px;
+}
+.login-form {
+    padding: 20px;
+}
+
+#div {
+    background-color: #F0F4EF;
+}
+#login-box {
+    background-color: #344966;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px #555555;
+    padding-top: 10px;
+}
+#top-login {
+    background-color: #344966;
+    border-radius: 20px;
+}
+
+#top-login span {
+    color: #B4CDED; 
+    font-family: Poppins;
+    font-weight: bold;
+    letter-spacing: 0.02cm;
+    font-size: 35px;
+    padding-top: 5px;
+}
+#username, #password {
+    background-color: #FFFFFF;
+    padding-bottom: 0px!important;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: #0D1821;
+}
+
+#submit {
+    width: 40%;
+    background-color: #B4CDED;
+    margin-left: 30%;
+}
+
+#button-text {
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: bold;
+    color: #344966;
+}
