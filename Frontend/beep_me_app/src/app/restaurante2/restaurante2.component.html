@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" style="height: 10% !important; text-align: center">
+  <span
+    style="
+      font-family: 'Pacifico';
+      font-size: 50px;
+      font-weight: normal;
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+    "
+    >Beep me<span style="color: white">.</span></span
+  >
+</mat-toolbar>
+<div class="content-wrapper">
+  <div class="container-wrapper">
+    <div class="container">
+      <h2 style="color: #0d1821; text-align: center; font-size: x-large">
+        Pedidos
+      </h2>
+      <mat-card id="pedidos" class="list">
+        <p class="empty-label" *ngIf="todo.length === 0">Empty list</p>
+        <app-task
+          (click)="openDialog()"
+          *ngFor="let task of todo"
+          [task]="task"
+        ></app-task>
+      </mat-card>
+    </div>
+  </div>
+</div>

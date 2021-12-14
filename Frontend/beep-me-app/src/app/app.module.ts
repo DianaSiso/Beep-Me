@@ -18,8 +18,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TaskComponent } from './restaurant/task/task.component';
 import { TaskDialogComponent } from './restaurant/task-dialog/task-dialog.component';
-import { Restaurante2Component } from './restaurante2/restaurante2.component';
-import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,9 +25,7 @@ import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.comp
     LoginComponent,
     RestaurantComponent,
     TaskComponent,
-    TaskDialogComponent,
-    Restaurante2Component,
-    RestDialogComponent
+    TaskDialogComponent
   ],
   imports: [
     BrowserModule,
