@@ -31,6 +31,7 @@ import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.comp
     Restaurante2Component,
     RestDialogComponent
   ],
+  entryComponents: [RestDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

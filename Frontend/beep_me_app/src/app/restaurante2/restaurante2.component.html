@@ -20,7 +20,7 @@
       <mat-card id="pedidos" class="list">
         <p class="empty-label" *ngIf="todo.length === 0">Empty list</p>
         <app-task
-          (click)="openDialog()"
+          (click)="openDialog(task)"
           *ngFor="let task of todo"
           [task]="task"
         ></app-task>

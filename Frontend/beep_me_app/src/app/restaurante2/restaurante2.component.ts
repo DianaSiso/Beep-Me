@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../restaurant/task/task';
 import { transferArrayItem, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatDialog,MatDialogConfig } from '@angular/material/dialog';
-import { RestDialogComponent } from './rest-dialog/rest-dialog.component';
+import { RestDialogComponent } from './rest-dialog/rest-dialog.component'; 
 @Component({
   selector: 'app-restaurant',
   templateUrl: './restaurante2.component.html',
@@ -18,31 +18,15 @@ export class Restaurante2Component implements OnInit {
   ];
   inProgress: Task[]=[];
   done: Task[]=[];
-  constructor(private dialog:MatDialog){}
+  constructor(public dialog:MatDialog){}
  
   editTask(list: string, task:Task): void{}
   
-  openDialog() {
+  openDialog(task:Task) {
     console.log("opendialogfunc")
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.position = {
-      'top': '0',
-      'left': '0'
-  };
-    dialogConfig.data = {
-        title: 'Angular For Beginners'
-    };
-
-    this.dialog.open(RestDialogComponent, dialogConfig);
-    
-    const dialogRef = this.dialog.open(RestDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
-    );    
+    let dialogRef = this.dialog.open(RestDialogComponent, {data : {name: task.title}});
+    dialogRef.afterClosed().subscribe(result => {console.log(`Dialog result: ${result}`);//aqui vamos aumentar atraso e passar para o cliente
+  });
 }
   ngOnInit(): void {
   }
