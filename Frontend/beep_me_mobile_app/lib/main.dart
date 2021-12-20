@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'elements/elements.dart';
 import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
@@ -60,6 +64,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+
   int page = 0;
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -94,6 +99,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       case 1:
         {
           return Container();
+          // return qrCodePage();
         }
       case 2:
         {
@@ -120,11 +126,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   // This method is rerun every time setState is called, for instance as done
   // by the _incrementCounter method above.
@@ -529,4 +530,5 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
   }
+
 }

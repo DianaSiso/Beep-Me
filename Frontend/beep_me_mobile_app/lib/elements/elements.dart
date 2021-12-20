@@ -1,24 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget bottomAppBar() {
-  return BottomAppBar(
-    color: const Color(0xffBFCC94),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        IconButton(
-            icon: const Icon(
-              Icons.show_chart_rounded,
-              size: 45,
-            ),
-            onPressed: () {}),
-        const SizedBox(),
-        IconButton(
-            icon: const Icon(Icons.restaurant, size: 40), onPressed: () {}),
-      ],
-    ),
-  );
-}
+
 
 Widget shoopingNameCard() {
   return Padding(
@@ -159,32 +141,7 @@ Widget pedidosCard(int itemCount, AnimationController progressBarController) {
   );
 }
 
-Widget appBar(String title) {
-  return AppBar(
-    // Here we take the value from the HomePage object that was created by
-    // the App.build method, and use it to set our appbar title.
-    title: Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Align(
-          alignment: Alignment.center,
-          child: RichText(
-            text: TextSpan(
-              text: title,
-              style: const TextStyle(
-                  color: Colors.black, fontSize: 35, fontFamily: "Poppins"),
-              children: const <TextSpan>[
-                TextSpan(
-                    text: '.',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontFamily: "Poppins")),
-              ],
-            ),
-          )),
-    ),
-  );
-}
+
 
 Widget titleNameRestaurant(String name) {
   return Padding(

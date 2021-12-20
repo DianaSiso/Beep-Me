@@ -1,6 +1,8 @@
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class dataGen {
     static String getAlphaNumericString(int n)
@@ -21,7 +23,7 @@ public class dataGen {
 
     public static void main(String[] args) {
         Random rand = new Random();
-        HashMap<String, Character> restaurants = new HashMap<String, String>();
+        HashMap<String, Character> restaurants = new HashMap<String, Character>();
         restaurants.put("H3", 'C');
         restaurants.put("KFC", 'B');
         restaurants.put("McDonald's", 'A');
@@ -56,15 +58,15 @@ public class dataGen {
                     f.write("Restaurante: " + r + "\n");
                     
                     if (restaurants.get(r) == 'A') {
-                        String[] orders = {{30, 40}, {100, 150}, {40, 90}, {100, 180}};
+                        int[][] orders = {{30, 40}, {100, 150}, {40, 90}, {100, 180}};
                     } else if (restaurants.get(r) == 'B') {
-                        String[] orders = {{20, 30}, {80, 120}, {20, 60}, {70, 150}};
+                        int[][] orders = {{20, 30}, {80, 120}, {20, 60}, {70, 150}};
                     } else if (restaurants.get(r) == 'C') {
-                        String[] orders = {{10, 30}, {70, 110}, {10, 40}, {60, 130}};
+                        int[][] orders = {{10, 30}, {70, 110}, {10, 40}, {60, 130}};
                     } else if (restaurants.get(r) == 'D') {
-                        String[] orders = {{10, 20}, {50, 90}, {10, 30}, {50, 110}};
+                        int[][] orders = {{10, 20}, {50, 90}, {10, 30}, {50, 110}};
                     } else {
-                        String[] orders = {{10, 40}, {50, 150}, {10, 60}, {50, 180}};
+                        int[][] orders = {{10, 40}, {50, 150}, {10, 60}, {50, 180}};
                     }
 
                     for (int h=0; h<4; h++) {
@@ -74,7 +76,7 @@ public class dataGen {
 
                         for (int i=0; i<orders_t; i++) {
                             do {
-                                String c = RandomString.getAlphaNumericString(8);
+                                String c = getAlphaNumericString(8);
                             } while (code.contains(c));
                             System.out.println(c);
                             code.add(c);
