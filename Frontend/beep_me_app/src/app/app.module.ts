@@ -20,7 +20,7 @@ import { TaskComponent } from './restaurant/task/task.component';
 import { TaskDialogComponent } from './restaurant/task-dialog/task-dialog.component';
 import { Restaurante2Component } from './restaurante2/restaurante2.component';
 import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.component';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +45,8 @@ import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.comp
     MatIconModule,
     FormsModule,
     MatDialogModule,
-    DragDropModule
+    DragDropModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

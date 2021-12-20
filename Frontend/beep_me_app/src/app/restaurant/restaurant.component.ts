@@ -3,7 +3,7 @@ import { Task } from './task/task';
 import { transferArrayItem, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from './task-dialog/task-dialog.component';
-
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-restaurant',
   templateUrl: './restaurant.component.html',
@@ -13,13 +13,13 @@ export class RestaurantComponent implements OnInit {
 
   title = 'beep-me-web-app';
   todo: Task[] = [
-    {title: 'Pedido nº 1354',description:''},
-    {title: 'Pedido nº 1364',description:'Atrasado'},
-    {title: 'Pedido nº 1374',description:''}
   ];
   inProgress: Task[]=[];
   done: Task[]=[];
-  constructor(private dialog:MatDialog){}
+  constructor(private dialog:MatDialog,private httpClient:HttpClient){}
+  fetchData():void{
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080').subscribe(response=>{console.log(response);this.todo=response;});
+  }
   newTask(): void{
     const dialogRef = this.dialog.open(TaskDialogComponent,{
       width:'270px',
@@ -48,6 +48,7 @@ export class RestaurantComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.fetchData();
   }
 
 }
