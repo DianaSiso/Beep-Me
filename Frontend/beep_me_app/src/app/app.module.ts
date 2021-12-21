@@ -21,6 +21,7 @@ import { TaskDialogComponent } from './restaurant/task-dialog/task-dialog.compon
 import { Restaurante2Component } from './restaurante2/restaurante2.component';
 import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ChoiceComponent } from './choice/choice.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
     TaskComponent,
     TaskDialogComponent,
     Restaurante2Component,
-    RestDialogComponent
+    RestDialogComponent,
+    ChoiceComponent
   ],
   entryComponents: [RestDialogComponent],
   imports: [

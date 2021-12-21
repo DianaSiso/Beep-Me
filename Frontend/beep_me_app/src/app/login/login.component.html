@@ -22,7 +22,13 @@
             >person_outline</mat-icon
           >Username</mat-label
         >
-        <input style="height: 30px" matInput placeholder="Username" />
+        <input
+          style="height: 30px"
+          matInput
+          placeholder="Username"
+          value="{{ username }}"
+          id="user"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="fill" id="password">
@@ -36,6 +42,7 @@
           matInput
           type="password"
           placeholder="Password"
+          value="{{ pwd }}"
         />
       </mat-form-field>
       <br />
@@ -44,7 +51,6 @@
         type="submit"
         id="submit"
         (click)="verifyLogin()"
-        routerLink="{{ type }}"
       >
         <span id="button-text">LOGIN</span
         ><!--<mat-icon style="color: #344966;">arrow_forward</mat-icon>-->
