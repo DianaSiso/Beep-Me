@@ -26,8 +26,7 @@
           style="height: 30px"
           matInput
           placeholder="Username"
-          value="{{ username }}"
-          id="user"
+          (keyup)="user($event)"
         />
       </mat-form-field>
 
@@ -42,7 +41,7 @@
           matInput
           type="password"
           placeholder="Password"
-          value="{{ pwd }}"
+          (keyup)="pswd($event)"
         />
       </mat-form-field>
       <br />
