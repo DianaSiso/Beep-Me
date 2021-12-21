@@ -1,3 +1,31 @@
-<button>management</button>
-<button>front</button>
-<button>back</button>
+<mat-toolbar color="primary" style="height: 10% !important; text-align: center">
+  <span
+    style="
+      font-family: 'Pacifico';
+      font-size: 50px;
+      font-weight: normal;
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+    "
+    >Beep me<span style="color: white">.</span></span
+  >
+</mat-toolbar>
+<div class="content-wrapper">
+  <div class="container-wrapper">
+    <div class="container">
+      <mat-card>
+        <button mat-raised-button routerLink="/restaurant-component">
+          Balcão
+        </button></mat-card
+      >
+    </div>
+    <div class="container">
+      <mat-card
+        ><button mat-raised-button routerLink="/kitchen-component">
+          Cozinha
+        </button></mat-card
+      >
+    </div>
+  </div>
+</div>
