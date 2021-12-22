@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -26,6 +28,7 @@ public class Order {
     @Column
     private Integer orderID;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
@@ -40,7 +43,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    
+    public Order() {
+    }
 
     public Order(Integer orderID, Restaurant restaurant, LocalTime orderedTime, LocalTime possibleDeliveryTime,
             State state) {

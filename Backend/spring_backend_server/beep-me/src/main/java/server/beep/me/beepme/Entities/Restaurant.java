@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "restaurants")
@@ -25,11 +27,14 @@ public class Restaurant {
     @Column
     private String name;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Order> orders;
-
     
+    public Restaurant() {
+    }
+
     public Restaurant(String name) {
         this.name = name;
     }

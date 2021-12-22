@@ -1,5 +1,6 @@
 package server.beep.me.beepme.Services;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import server.beep.me.beepme.Entities.Order;
 import server.beep.me.beepme.Entities.Restaurant;
+import server.beep.me.beepme.Entities.State;
 import server.beep.me.beepme.Entities.User;
+import server.beep.me.beepme.Forms.OrderForm;
+import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Respositories.OrdersRepository;
 import server.beep.me.beepme.Respositories.RestaurantsRepository;
 import server.beep.me.beepme.Respositories.UserRepository;
@@ -54,16 +58,40 @@ public class BusinessLogic {
         }
     }
 
-    public Order create_order(Order order) {
-        Order saved_order = ordersRepository.save(order);
+    public Order create_order(OrderForm order) {
+        LocalTime orderedTime = LocalTime.parse(order.getOrderedTime());
+        LocalTime possibleDeliveryTime = LocalTime.parse(order.getPossibleDeliveryTime());
+        State state = State.valueOf(order.getState());
+        Optional<Restaurant> rest = restRepository.findById(order.getRestaurant_id());
 
-        return saved_order;
+        if (rest.isPresent()) {
+            Restaurant restaurant = rest.get();
+            Order to_save = new Order(  order.getOrderID(),
+                                        restaurant,
+                                        orderedTime, 
+                                        possibleDeliveryTime,
+                                        state);
+            Order saved_order = ordersRepository.save(to_save);
+
+            return saved_order;
+        }
+
+        return null;
+        
     }
 
-    public Order create_rest(Restaurant rest) {
-        Restaurant saved_rest = restRepository.save(rest);
+    public Restaurant create_rest(RestForm rest) {
+        String name = rest.getName();
+        List<Restaurant> rests = restRepository.findByName(name);
+        if (rests.isEmpty()) {
+            Restaurant to_save = new Restaurant(name);
+            Restaurant saved_rest = restRepository.save(to_save);
+    
+            return saved_rest;
+        }
 
-        return saved_rest;
+        return null;
+        
     }
 }
     

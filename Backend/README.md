@@ -25,6 +25,8 @@
 # How to copy files from one machine to another using ssh 
 
 - scp *source* *destiantion*
+- to copy a directory run 
+    - scp -r *source* *destiantion*
 
 # How to make two docker containers communicate by ip in the same machine
 
@@ -38,10 +40,10 @@
 
 # How to remove a docker image and container 
 
-- Remove a container:
+- Remove an image:
     - <docker rmi **image_name_or_ID**>
 
-- Remove an image:
+- Remove a container:
     - <docker rm **container_name_or_ID**>
 
 
@@ -53,7 +55,15 @@
 
 # How to remove a directory
 
-- 
+- rm -Rf **name of dir**
+
+# How to enter in exec mode in a container
+
+- <docker exec -it **nome_container** /bin/bash >
+
+# How to enter in the mysql cli interface
+
+- <mysql --user=user_name --password db_name>
  
 
 
