@@ -63,7 +63,11 @@
 
 # How to enter in the mysql cli interface
 
-- <mysql --user=user_name --password db_name>
+- <mysql --user=user_name --password db_name>  
+
+# How to create a dockere container for RabbitMQ
+
+- <docker run -d --hostname rabbitMQ --name rabbitMQContainer -p 15672:15672 -p 5672:5672 rabbitmq:3-management>
  
 
 
