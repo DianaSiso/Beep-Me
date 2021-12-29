@@ -1,6 +1,6 @@
 package server.beep.me.beepme.Entities;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,19 +25,19 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
-    private Integer orderID;
-
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     @Column
-    private LocalTime orderedTime;
+    private LocalDateTime orderedTime;
 
     @Column
-    private LocalTime possibleDeliveryTime;
+    private LocalDateTime possibleDeliveryTime;
+
+    @Column
+    private String code;
 
     @Column(columnDefinition = "ENUM('READY', 'ORDERED', 'IN_PREPARATION', 'LATE')")
     @Enumerated(EnumType.STRING)
@@ -46,12 +46,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(Integer orderID, Restaurant restaurant, LocalTime orderedTime, LocalTime possibleDeliveryTime,
+    public Order(Restaurant restaurant, LocalDateTime orderedTime, LocalDateTime possibleDeliveryTime, String code,
             State state) {
-        this.orderID = orderID;
         this.restaurant = restaurant;
         this.orderedTime = orderedTime;
         this.possibleDeliveryTime = possibleDeliveryTime;
+        this.code = code;
         this.state = state;
     }
 
@@ -63,14 +63,6 @@ public class Order {
         this.id = id;
     }
 
-    public Integer getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(Integer orderID) {
-        this.orderID = orderID;
-    }
-
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -79,20 +71,28 @@ public class Order {
         this.restaurant = restaurant;
     }
 
-    public LocalTime getOrderedTime() {
+    public LocalDateTime getOrderedTime() {
         return orderedTime;
     }
 
-    public void setOrderedTime(LocalTime orderedTime) {
+    public void setOrderedTime(LocalDateTime orderedTime) {
         this.orderedTime = orderedTime;
     }
 
-    public LocalTime getPossibleDeliveryTime() {
+    public LocalDateTime getPossibleDeliveryTime() {
         return possibleDeliveryTime;
     }
 
-    public void setPossibleDeliveryTime(LocalTime possibleDeliveryTime) {
+    public void setPossibleDeliveryTime(LocalDateTime possibleDeliveryTime) {
         this.possibleDeliveryTime = possibleDeliveryTime;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public State getState() {
@@ -103,13 +103,11 @@ public class Order {
         this.state = state;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Order [code=" + code + ", id=" + id + ", orderedTime=" + orderedTime + ", possibleDeliveryTime="
+                + possibleDeliveryTime + ", restaurant=" + restaurant + ", state=" + state + "]";
+    }
 
-
-    
-
-    
-
-    
     
 }

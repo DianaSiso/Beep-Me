@@ -11,21 +11,21 @@ import lombok.ToString;
 // @NoArgsConstructor
 // @AllArgsConstructor
 // @ToString
-public class Order {
+public class OrderMessage {
     
     private String code;
     private String restaurant;
     private String ordered;
     private String previsted;
 
-    public Order(String code, String restaurant, String ordered, String previsted) {
+    public OrderMessage(String code, String restaurant, String ordered, String previsted) {
         this.code = code;
         this.restaurant = restaurant;
         this.ordered = ordered;
         this.previsted = previsted;
     }
 
-    public Order() {
+    public OrderMessage() {
     }
 
     public String getCode() {

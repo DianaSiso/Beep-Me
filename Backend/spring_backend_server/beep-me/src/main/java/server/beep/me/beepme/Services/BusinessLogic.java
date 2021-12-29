@@ -1,6 +1,8 @@
 package server.beep.me.beepme.Services;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import server.beep.me.beepme.Entities.State;
 import server.beep.me.beepme.Entities.User;
 import server.beep.me.beepme.Forms.OrderForm;
 import server.beep.me.beepme.Forms.RestForm;
+import server.beep.me.beepme.MessageQueue.OrderMessage;
 import server.beep.me.beepme.Respositories.OrdersRepository;
 import server.beep.me.beepme.Respositories.RestaurantsRepository;
 import server.beep.me.beepme.Respositories.UserRepository;
@@ -59,17 +62,17 @@ public class BusinessLogic {
     }
 
     public Order create_order(OrderForm order) {
-        LocalTime orderedTime = LocalTime.parse(order.getOrderedTime());
-        LocalTime possibleDeliveryTime = LocalTime.parse(order.getPossibleDeliveryTime());
+        LocalDateTime orderedTime = LocalDateTime.parse(order.getOrderedTime());
+        LocalDateTime possibleDeliveryTime = LocalDateTime.parse(order.getPossibleDeliveryTime());
         State state = State.valueOf(order.getState());
         Optional<Restaurant> rest = restRepository.findById(order.getRestaurant_id());
 
         if (rest.isPresent()) {
             Restaurant restaurant = rest.get();
-            Order to_save = new Order(  order.getOrderID(),
-                                        restaurant,
+            Order to_save = new Order( restaurant,
                                         orderedTime, 
                                         possibleDeliveryTime,
+                                        order.getCode(),
                                         state);
             Order saved_order = ordersRepository.save(to_save);
 
@@ -92,6 +95,27 @@ public class BusinessLogic {
 
         return null;
         
+    }
+
+    public Order saveOrder(OrderMessage orderMessage) {
+        List<Restaurant> rest = restRepository.findByName(orderMessage.getRestaurant());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+        LocalDateTime ordereDateTime = LocalDateTime.parse(orderMessage.getOrdered(), formatter);
+        LocalDateTime previstedDateTime = LocalDateTime.parse(orderMessage.getPrevisted(), formatter);
+        State state = State.ORDERED;
+
+        if (rest.isEmpty()) {
+            return null;
+        }
+        Order order = new Order();
+        order.setCode(orderMessage.getCode());
+        order.setRestaurant(rest.get(0));
+        order.setOrderedTime(ordereDateTime);
+        order.setPossibleDeliveryTime(previstedDateTime);
+        order.setState(state);
+
+        Order savedOrder = ordersRepository.save(order);
+        return savedOrder;
     }
 }
     
