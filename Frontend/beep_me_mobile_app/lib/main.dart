@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'elements/elements.dart';
 import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
+//import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() {
   runApp(const MyApp());
@@ -66,6 +67,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     const Color(0xff02d39a),
   ];
 
+  String code = '';
+
   bool showAvg = false;
   String dropdownValue = "Mcdonalds";
   List<String> restaurantes = [
@@ -126,6 +129,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  // readQRCode() async {
+  //   String codeRead = await FlutterBarcodeScanner.scanBarcode(
+  //     "#FFFFFF",
+  //     "Cancelar",
+  //     false,
+  //     ScanMode.QR,
+  //   );
+  //   setState(() => code = codeRead != '-1' ? codeRead : 'Não validado');
+  // }
+
   // This method is rerun every time setState is called, for instance as done
   // by the _incrementCounter method above.
   @override
@@ -147,6 +160,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation
           .centerDocked, // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Widget qrcode() {
+    //readQRCode();
+    return Text(code);
   }
 
   Widget bottomAppBar() {
