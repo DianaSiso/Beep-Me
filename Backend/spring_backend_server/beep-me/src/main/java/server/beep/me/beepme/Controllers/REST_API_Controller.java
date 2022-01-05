@@ -78,7 +78,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders/meanTime", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/meanTime/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Double orders_mean_time_by_restaurant(@RequestParam(name = "rest_id") Integer rest_id) {
 
@@ -88,7 +88,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders/meanTime", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/meanTime/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HashMap<String, Double> orders_mean_time() {
 
