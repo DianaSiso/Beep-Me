@@ -48,6 +48,7 @@ public class Range {
             Integer min = meal.get(0);
             Integer max = meal.get(1);
             if (hour >= min && hour <=max) {
+                System.out.println("PROB MEAL: " + (meal.get(2) / 100));
                 prob = (double) (meal.get(2) / 100);
             }
         }
