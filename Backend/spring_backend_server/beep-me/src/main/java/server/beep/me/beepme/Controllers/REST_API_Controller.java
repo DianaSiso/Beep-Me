@@ -45,7 +45,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_restaurant(@RequestParam(name = "rest_id") String rest_id) {
         Integer id = Integer.parseInt(rest_id);
@@ -59,7 +59,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/state", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_state(@RequestParam(name = "state") String s) {
         
@@ -68,7 +68,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/orders/date", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_date(@RequestParam(name = "date") String date) {
 
