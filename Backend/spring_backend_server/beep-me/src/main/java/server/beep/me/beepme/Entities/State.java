@@ -5,5 +5,6 @@ public enum State {
     READY,
     ORDERED,
     IN_PREPARATION,
-    LATE
+    LATE,
+    DELIVERED
 }
