@@ -57,6 +57,8 @@ public class Range {
         }
 
         double r = Math.random();
+        System.out.println("PROB: " + prob);
+        System.out.println("HOUR: " + hour);
         return r < prob;
 
 
