@@ -164,6 +164,7 @@ public class BusinessLogic {
 
         Optional<Order> possibleOrder = ordersRepository.findById(s.getOrder_id());
         if (possibleOrder.isPresent()) {
+            System.out.println("HEREE");
             Order order = possibleOrder.get();
             order.setState(state);
             Order savedOrder = ordersRepository.save(order);
