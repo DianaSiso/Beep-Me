@@ -172,13 +172,17 @@ public class BusinessLogic {
         if (possibleOrder.isPresent()) {
             System.out.println("HEREE");
             Order order = possibleOrder.get();
-            order.setState(state);
-            Order savedOrder = ordersRepository.save(order);
-
-            if (savedOrder != null) {
-                return true;
+            if (!order.getState().toString().equals(State.DELIVERED.toString())) {
+                order.setState(state);
+                if (state.toString().equals(State.DELIVERED.toString())) {
+                    LocalDateTime now = LocalDateTime.now();
+                    order.setPossibleDeliveryTime(now);
+                }
+                Order savedOrder = ordersRepository.save(order);
+                if (savedOrder != null) {
+                    return true;
+                }
             }
-
         }
 
         return false;
@@ -194,6 +198,7 @@ public class BusinessLogic {
             LocalDateTime deliveryTime = order.getPossibleDeliveryTime();
             deliveryTime.plusMinutes(delayed.getMinutes());
             order.setPossibleDeliveryTime(deliveryTime);
+            order.setState(State.LATE);
             Order savedOrder = ordersRepository.save(order);
 
             if (savedOrder != null) {
