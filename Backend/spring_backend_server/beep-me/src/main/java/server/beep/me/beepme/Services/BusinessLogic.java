@@ -152,7 +152,9 @@ public class BusinessLogic {
 
     public boolean change_order_state(StateForm s) {
         State state = null;
+        System.out.println(s.getState());
         for (State st : State.values()) {
+            System.out.println(st.toString());
             if(st.toString().equals(s.getState()))
                state = st;
                break;

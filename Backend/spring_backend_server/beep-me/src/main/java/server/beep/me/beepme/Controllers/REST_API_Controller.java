@@ -98,7 +98,7 @@ public class REST_API_Controller {
     }
 
     @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
-    @RequestMapping(value = "/orders/status", method = RequestMethod.POST)
+    @RequestMapping(value = "/orders/state", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> change_order_state(@RequestBody StateForm state) {
         boolean saved = backend.change_order_state(state);
