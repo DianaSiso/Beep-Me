@@ -39,7 +39,7 @@ public class Order {
     @Column
     private String code;
 
-    @Column(columnDefinition = "ENUM('READY', 'ORDERED', 'IN_PREPARATION', 'LATE')")
+    @Column(columnDefinition = "ENUM('READY', 'ORDERED', 'IN_PREPARATION', 'LATE', 'DELIVERED')")
     @Enumerated(EnumType.STRING)
     private State state;
 
