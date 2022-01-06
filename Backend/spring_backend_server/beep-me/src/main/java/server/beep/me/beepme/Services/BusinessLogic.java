@@ -141,8 +141,10 @@ public class BusinessLogic {
                     
                 }
             }
-            double meanMinutes = sum / count;
-            rest_to_meanTime.put(rest.getName(), meanMinutes);
+            if (count > 0) {
+                double meanMinutes = sum / count;
+                rest_to_meanTime.put(rest.getName(), meanMinutes);
+            }
 
         }
 
