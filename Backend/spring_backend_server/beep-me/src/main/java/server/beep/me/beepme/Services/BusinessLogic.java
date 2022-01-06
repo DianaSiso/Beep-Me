@@ -156,8 +156,9 @@ public class BusinessLogic {
         for (State st : State.values()) {
             System.out.println(st.toString());
             if(st.toString().equals(s.getState()))
-               state = st;
-               break;
+                System.out.println("IS EQUAL");
+                state = st;
+                break;
         }
 
         if (state == null) {
