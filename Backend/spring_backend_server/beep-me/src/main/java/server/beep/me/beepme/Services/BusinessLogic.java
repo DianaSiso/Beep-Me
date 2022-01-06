@@ -159,10 +159,12 @@ public class BusinessLogic {
         }
 
         if (state == null) {
+            System.out.println("STATE IS NULL");
             return false;
         }
 
         Optional<Order> possibleOrder = ordersRepository.findById(s.getOrder_id());
+        System.out.println(possibleOrder.isPresent());
         if (possibleOrder.isPresent()) {
             System.out.println("HEREE");
             Order order = possibleOrder.get();
