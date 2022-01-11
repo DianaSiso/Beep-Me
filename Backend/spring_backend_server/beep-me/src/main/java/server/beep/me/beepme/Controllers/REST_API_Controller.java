@@ -24,7 +24,7 @@ import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Services.BusinessLogic;
 
-// @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+@CrossOrigin
 @RestController
 public class REST_API_Controller {
 
