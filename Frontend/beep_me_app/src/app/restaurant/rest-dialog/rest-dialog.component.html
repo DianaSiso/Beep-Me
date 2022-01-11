@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Order {{ data.name }}</h1>
+<h3>Do you really wish to cancel this order?</h3>
+<mat-dialog-actions
+  style="display: flex; flex-direction: row; justify-content: space-between"
+>
+  <button mat-button mat-dialog-close mat-dialog-close="cancel">Yes</button>
+  <button mat-button mat-dialog-close mat-dialog-close="dont">No</button>
+</mat-dialog-actions>
