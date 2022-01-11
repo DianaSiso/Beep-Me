@@ -49,6 +49,7 @@ export class RestaurantComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchData();
+    setInterval(()=>{this.fetchData();},50);
   }
 
 }
