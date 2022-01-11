@@ -16,7 +16,7 @@ export class Restaurante2Component implements OnInit {
   
   constructor(public dialog:MatDialog,private httpClient:HttpClient){}
   fetchData():void{
-    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/orders?rest_id=id').subscribe(response=>{console.log(response);
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/orders/restaurant?rest_id=2').subscribe(response=>{console.log(response);
     //não sei se é esta syntaxe    
     this.todo=response;});
   }
