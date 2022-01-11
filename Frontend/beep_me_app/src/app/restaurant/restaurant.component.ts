@@ -18,7 +18,7 @@ export class RestaurantComponent implements OnInit {
   done: Task[]=[];
   constructor(private dialog:MatDialog,private httpClient:HttpClient){}
   fetchData():void{
-    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080').subscribe(response=>{console.log(response);this.todo=response;});
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/orders/restaurant?rest_id=2').subscribe(response=>{console.log(response);this.todo=response;});
   }
   newTask(): void{
     const dialogRef = this.dialog.open(TaskDialogComponent,{
