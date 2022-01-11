@@ -20,6 +20,7 @@ import { TaskComponent } from './restaurant/task/task.component';
 import { TaskDialogComponent } from './restaurant/task-dialog/task-dialog.component';
 import { Restaurante2Component } from './restaurante2/restaurante2.component';
 import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.component';
+import { RestDialogComponent2 } from './restaurant/rest-dialog/rest-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChoiceComponent } from './choice/choice.component';
 @NgModule({
@@ -31,6 +32,7 @@ import { ChoiceComponent } from './choice/choice.component';
     TaskDialogComponent,
     Restaurante2Component,
     RestDialogComponent,
+    RestDialogComponent2,
     ChoiceComponent
   ],
   entryComponents: [RestDialogComponent],
