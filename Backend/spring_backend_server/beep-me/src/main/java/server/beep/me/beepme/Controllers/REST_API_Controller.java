@@ -24,6 +24,7 @@ import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Services.BusinessLogic;
 
+// @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
 @RestController
 public class REST_API_Controller {
 
@@ -32,7 +33,7 @@ public class REST_API_Controller {
 
    Restaurant rest;
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ResponseEntity<String> login(@RequestParam(name = "username") String username, @RequestParam(name = "pwd") String password) {
         boolean response = backend.verifyUser(username, password);
@@ -44,7 +45,7 @@ public class REST_API_Controller {
         }
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_restaurant(@RequestParam(name = "rest_id") String rest_id) {
@@ -58,7 +59,7 @@ public class REST_API_Controller {
         }
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/state", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_state(@RequestParam(name = "state") String s) {
@@ -67,7 +68,7 @@ public class REST_API_Controller {
         return orders;
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/date", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_date(@RequestParam(name = "date") String date) {
@@ -77,7 +78,7 @@ public class REST_API_Controller {
 
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/meanTime/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Double orders_mean_time_by_restaurant(@RequestParam(name = "rest_id") Integer rest_id) {
@@ -87,7 +88,7 @@ public class REST_API_Controller {
 
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/meanTime/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HashMap<String, Double> orders_mean_time() {
@@ -97,7 +98,7 @@ public class REST_API_Controller {
 
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/state", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> change_order_state(@RequestBody StateForm state) {
@@ -109,7 +110,7 @@ public class REST_API_Controller {
         }
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/orders/delayed", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> delayed(@RequestBody DelayedForm delayed) {
@@ -121,7 +122,7 @@ public class REST_API_Controller {
         }
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/order", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> create_order(@RequestBody OrderForm order) {
@@ -134,7 +135,7 @@ public class REST_API_Controller {
         }
     }
 
-    @CrossOrigin(origins = "http://deti-engsoft-02.ua.pt:8080")
+     
     @RequestMapping(value = "/restaurant", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> create_restaurant(@RequestBody RestForm rest) {
