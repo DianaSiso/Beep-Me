@@ -60,6 +60,21 @@ public class BusinessLogic {
             Restaurant rest = rest_opt.get();
             List<Order> orders = ordersRepository.findByRestaurant(rest, Sort.unsorted());
 
+            ArrayList<Order> toReturn = new ArrayList<>();
+            for (Order order : orders) {
+                if (order.getState().toString().equals(State.DELIVERED.toString())) {
+                    LocalDateTime delivereDateTime = order.getPossibleDeliveryTime();
+                    LocalDateTime now = LocalDateTime.now();
+
+                    Duration duration = Duration.between(now, delivereDateTime);
+                    long diff = Math.abs(duration.toMinutes());
+
+                    if ( diff <= 10) {
+                        toReturn.add(order);
+                    }
+                }
+            }
+
             return (ArrayList<Order>)orders;
         } else {
             return null;
@@ -276,6 +291,15 @@ public class BusinessLogic {
 
         Order savedOrder = ordersRepository.save(order);
         return savedOrder;
+    }
+
+    public boolean cancel_order(String order_id) {
+        try {
+            ordersRepository.deleteById(Integer.parseInt(order_id));
+            return true;
+        } catch(IllegalArgumentException e) {
+            return false;
+        }
     }
 }
     

@@ -18,7 +18,7 @@ public class MessagePublisher {
 
     private static Range range = new Range();
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 30000)
     @GetMapping("/publish")
     public String publishOrder() {
 

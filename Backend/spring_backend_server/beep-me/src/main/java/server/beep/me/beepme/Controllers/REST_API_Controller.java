@@ -59,6 +59,18 @@ public class REST_API_Controller {
         }
     }
 
+    @RequestMapping(value = "/orders/cancel", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> cancel_order(@RequestParam(name = "order_id") String order_id) {
+        boolean done = backend.cancel_order(order_id);
+        
+        if (done) {
+            return new ResponseEntity<>("Order deleted successesfully!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Order was not deleted!",HttpStatus.CONFLICT);
+        }
+    }
+
      
     @RequestMapping(value = "/orders/state", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
