@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ public class MessagePublisher {
 
     @Autowired
     private RabbitTemplate template;
+    
+    @Value("${rest}")
+    private String rest;
 
     private static Range range = new Range();
 
@@ -23,6 +27,8 @@ public class MessagePublisher {
     public String publishOrder() {
 
         if (range.getProbability(LocalDateTime.now().getHour())){
+
+            System.out.println(rest);
         
             DataGen dataGen = new DataGen();
 
