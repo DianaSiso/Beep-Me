@@ -23,6 +23,7 @@ import server.beep.me.beepme.Forms.DelayedForm;
 import server.beep.me.beepme.Forms.OrderForm;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
+import server.beep.me.beepme.Forms.UserForm;
 import server.beep.me.beepme.MessageQueue.OrderMessage;
 import server.beep.me.beepme.Respositories.OrdersRepository;
 import server.beep.me.beepme.Respositories.RestaurantsRepository;
@@ -201,6 +202,20 @@ public class BusinessLogic {
         }
 
         return null;
+        
+    }
+
+    public User create_user(UserForm order) {
+        boolean manager;
+        if (order.getManager().toLowerCase().equals("true".toLowerCase())) {
+            manager = true;
+        } else {
+            manager = false;
+        }
+
+        User user = new User(order.getUsername(), order.getPassword(), manager);
+        User saved_user = userRepository.save(user);
+        return saved_user;
         
     }
 

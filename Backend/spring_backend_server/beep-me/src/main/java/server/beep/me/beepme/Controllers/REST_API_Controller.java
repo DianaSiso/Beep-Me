@@ -3,6 +3,8 @@ package server.beep.me.beepme.Controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import server.beep.me.beepme.Entities.Order;
 import server.beep.me.beepme.Entities.Restaurant;
 import server.beep.me.beepme.Entities.State;
+import server.beep.me.beepme.Entities.User;
 import server.beep.me.beepme.Forms.DelayedForm;
 import server.beep.me.beepme.Forms.OrderForm;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
+import server.beep.me.beepme.Forms.UserForm;
 import server.beep.me.beepme.Services.BusinessLogic;
 
 @CrossOrigin
@@ -31,11 +35,21 @@ public class REST_API_Controller {
    @Autowired
    private BusinessLogic backend;
 
-   Restaurant rest;
+    private void getUserFromSession(HttpServletRequest request) {
+        @SuppressWarnings("unchecked")
+        Long user_ID = (Long) request.getSession().getAttribute("USER_ID");
+
+        if (user_ID != null) {
+            System.out.println(user_ID);
+        } else {
+            System.out.println("NOT A USER_ID");
+        }
+    }
 
      
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<String> login(@RequestParam(name = "username") String username, @RequestParam(name = "pwd") String password) {
+    public ResponseEntity<String> login(@RequestParam(name = "username") String username, @RequestParam(name = "pwd") String password, HttpServletRequest request) {
+        this.getUserFromSession(request);
         boolean response = backend.verifyUser(username, password);
 
         if (response) {
@@ -123,6 +137,18 @@ public class REST_API_Controller {
             return new ResponseEntity<>("Order created successesfully!", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Order was not created!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> create_user(@RequestBody UserForm user) {
+        User saved_user = backend.create_user(user);
+        
+        if (saved_user != null) {
+            return new ResponseEntity<>("User created successesfully!", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("User was not created!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
