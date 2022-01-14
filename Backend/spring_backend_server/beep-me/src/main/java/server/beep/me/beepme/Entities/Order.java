@@ -43,16 +43,20 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private State state;
 
+    @Column
+    private boolean late;
+
     public Order() {
     }
 
     public Order(Restaurant restaurant, LocalDateTime orderedTime, LocalDateTime possibleDeliveryTime, String code,
-            State state) {
+            State state, boolean late) {
         this.restaurant = restaurant;
         this.orderedTime = orderedTime;
         this.possibleDeliveryTime = possibleDeliveryTime;
         this.code = code;
         this.state = state;
+        this.late = late;
     }
 
     public Integer getId() {
@@ -103,10 +107,18 @@ public class Order {
         this.state = state;
     }
 
+    public boolean getLate() {
+        return late;
+    }
+
+    public void setLate(boolean late) {
+        this.late = late;
+    }
+
     @Override
     public String toString() {
         return "Order [code=" + code + ", id=" + id + ", orderedTime=" + orderedTime + ", possibleDeliveryTime="
-                + possibleDeliveryTime + ", restaurant=" + restaurant + ", state=" + state + "]";
+                + possibleDeliveryTime + ", restaurant=" + restaurant + ", state=" + state + ", late=" + late + "]";
     }
 
     

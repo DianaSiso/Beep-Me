@@ -89,27 +89,6 @@ public class REST_API_Controller {
         return orders;
 
     }
-
-     
-    @RequestMapping(value = "/orders/meanTime/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Double orders_mean_time_by_restaurant(@RequestParam(name = "rest_id") Integer rest_id) {
-
-        Double meanTime = backend.getMeanDeliveryTimeByRestaurant(rest_id);
-        return meanTime;
-
-    }
-
-     
-    @RequestMapping(value = "/orders/meanTime/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public HashMap<String, Double> orders_mean_time() {
-
-        HashMap<String, Double> meanTimeMap = backend.getMeanDeliveryTimeToAllRestaurants();
-        return meanTimeMap;
-
-    }
-
      
     @RequestMapping(value = "/orders/state", method = RequestMethod.POST)
     @ResponseBody
@@ -159,7 +138,65 @@ public class REST_API_Controller {
             return new ResponseEntity<>("Restaurant already exists!",HttpStatus.CONFLICT);
         }
     }
-    
 
+    @RequestMapping(value = "/restaurant/total_orders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, Integer> number_of_orders(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
+
+        if (rest_id != null) {
+            HashMap<String, Integer> rests_to_n_orders_map = backend.getNumberOfOrdersToAllRestaurants();
+            return rests_to_n_orders_map;
+        } else {
+            HashMap<String, Integer> rest_to_n_orders_map = backend.getNumberOfOrdersToSpecificRestaurant(rest_id);
+            return rest_to_n_orders_map;
+        }
+
+    }
+
+
+    @RequestMapping(value = "/restaurant/orders/meanTime", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, Double> orders_mean_time(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
+
+        if (rest_id != null) {
+            HashMap<String, Double> meanTimeMap = backend.getMeanDeliveryTimeByRestaurant(rest_id);
+            return meanTimeMap;
+        } else {
+            HashMap<String, Double> meanTimeMap = backend.getMeanDeliveryTimeToAllRestaurants();
+            return meanTimeMap;
+        }
+
+    }
+
+    @RequestMapping(value = "/restaurant/orders/delivered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, Integer> orders_delivered(@RequestParam(name = "rest_id", required = false) Integer rest_id, @RequestParam(name = "late", required = false) String late) {
+
+        if (rest_id != null) {
+            if (late != null) {
+                HashMap<String, Integer> deliveredMap = backend.getNumberOfOrdersLateDeliveriesSpecificRestaurants(rest_id);
+                return deliveredMap;
+            } else {
+                HashMap<String, Integer> deliveredMap = backend.getNumberOfOrdersDeliveredSpecificRestaurant(rest_id);
+                return deliveredMap;
+            }
+            
+        } else {
+            if (late != null) {
+                HashMap<String, Integer> deliveredSpecificRestMap = backend.getNumberOfOrdersLateDeliveriesAllRestaurants();
+                return deliveredSpecificRestMap;
+            } else {
+                HashMap<String, Integer> deliveredSpecificRestMap = backend.getNumberOfOrdersDeliveredAllRestaurants();
+                return deliveredSpecificRestMap;
+            }
+            
+        }
+
+    }
+
+    // @RequestMapping(value = "/restaurant/orders/notDelivered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    // @ResponseBody
+    // public HashMap<String, Integer> orders_not_delivered(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
     
+    // }
 }
