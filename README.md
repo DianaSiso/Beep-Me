@@ -35,8 +35,8 @@ cd beep_me_app
 npm install
 npm install chart.js
 ng serve
-open https://localhost:4200/ on browser
 ```
+open https://localhost:4200/ on browser
 
 ### Run mobile application:
 
