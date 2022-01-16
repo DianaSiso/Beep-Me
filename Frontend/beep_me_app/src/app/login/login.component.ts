@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   type="";
   pwd: string | undefined;
   username: string | undefined;
-  
+  state="";
   //username=(<HTMLInputElement>document.getElementById("user")).value;
   constructor(private httpClient:HttpClient,public router: Router) {
    }
@@ -24,11 +24,11 @@ export class LoginComponent implements OnInit {
   pswd(event:any) {this.pwd = event.target.value;}
 
   verifyLogin():void{
-    console.log("http://deti-engsoft-02.ua.pt:8080/login?username="+this.username+"&pwd="+this.pwd)
     this.httpClient.get<any>("http://deti-engsoft-02.ua.pt:8080/login?username="+this.username+"&pwd="+this.pwd).subscribe(response=>{console.log(response);
     if(response.status=="OK"){this.router.navigate(["/choice"])}
     else{
-      console.log("Nope")
+      console.log("Nope");
+      this.state="Wrong";
     }
   });
   }

@@ -19,12 +19,39 @@ For the development of our product, we will take inspiration from past experienc
 
 The system was implemented in **Spring Boot**, with a **MySQL** database, **rabbit MQ** as a message broker and a data generation program written in **Java**. For the Beep Me application's user interface we used **Angular** [web application] and **Flutter** [mobile application available for Android and iOS].
 
+## How to run
+
+### Run servers:
+
+```sh
+
+```
+
+### Run web application:
+
+```sh
+cd Frontend
+cd beep_me_app
+npm install
+npm install chart.js
+ng serve
+open https://localhost:4200/ on browser
+```
+
+### Run mobile application:
+
+```sh
+
+```
+
 ## Team
 
-- Andreia Portela 97953
-- Diana Siso 98607
-- Miguel Marques 100850
-- Ricardo Ferreira 98411
+| Nome             | Nmec   |
+| ---------------- | ------ |
+| Andreia Portela  | 97953  |
+| Diana Siso       | 98607  |
+| Miguel Marques   | 100850 |
+| Ricardo Ferreira | 98411  |
 
 ## Bookmarks
 

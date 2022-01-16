@@ -54,10 +54,13 @@
         <span id="button-text">LOGIN</span
         ><!--<mat-icon style="color: #344966;">arrow_forward</mat-icon>-->
       </button>
+
       <br />
       <br />
-      <span style="text-align: center; color: #b4cded"
-        >Forgot the password</span
+      <span
+        style="text-align: center; color: #b4cded"
+        *ngIf="this.state == 'Wrong'"
+        >Invalid Login</span
       >
     </form>
   </mat-card>
