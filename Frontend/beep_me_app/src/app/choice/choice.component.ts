@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChoiceComponent implements OnInit {
 
-  constructor() { console.log(localStorage.getItem("restId"));}
+  constructor() { }
 
   ngOnInit(): void {
   }
