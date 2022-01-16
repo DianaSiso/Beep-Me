@@ -1,78 +1,91 @@
-<mat-toolbar color="primary" style="height: 10%!important; text-align: center;">
-  <span style="font-family: 'Pacifico'; font-size: 50px; font-weight: normal; text-align: center; display: inline-block; width: 100%;">Beep me<span style="color: white">.</span></span>
+<mat-toolbar color="primary" style="height: 10% !important; text-align: center">
+  <span
+    style="
+      font-family: 'Pacifico';
+      font-size: 50px;
+      font-weight: normal;
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+    "
+    >Beep me<span style="color: white">.</span></span
+  >
 </mat-toolbar>
-  <div class="content-wrapper">
-    <button (click)="newTask()" mat-button>
-      <mat-icon> add </mat-icon>
-      Adicionar pedido #temporario
-    </button>
-    <div class="container-wrapper">
-      <div class="container">
-        <h2 style="color: #0d1821; text-align: center; font-size: x-large">
-          Preparando
-        </h2>
-        <mat-card
-          cdkDropList
-          id="todo"
-          #todoList="cdkDropList"
-          [cdkDropListData]="todo"
-          [cdkDropListConnectedTo]="[inProgressList]"
-          (cdkDropListDropped)="drop($event)"
-          class="list"
+<div class="content-wrapper">
+  <div class="container-wrapper">
+    <div class="container">
+      <h2 style="color: #0d1821; text-align: center; font-size: x-large">
+        In preparation
+      </h2>
+      <mat-card
+        cdkDropList
+        id="todo"
+        #todoList="cdkDropList"
+        [cdkDropListData]="todo"
+        [cdkDropListConnectedTo]="[inProgressList]"
+        (cdkDropListDropped)="drop($event)"
+        class="list"
+      >
+        <app-task
+          (edit)="editTask('todo', $event)"
+          *ngFor="let task of todo"
+          (click)="openDialog(task)"
+          cdkDrag
+          [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
+        ></app-task>
+      </mat-card>
+    </div>
+    <div class="container">
+      <h2 style="color: #0d1821; text-align: center; font-size: x-large">
+        Ready
+      </h2>
+      <mat-card
+        cdkDropList
+        id="inProgress"
+        #inProgressList="cdkDropList"
+        [cdkDropListData]="inProgress"
+        [cdkDropListConnectedTo]="[doneList]"
+        (cdkDropListDropped)="drop($event)"
+        class="list"
+      >
+        <app-task
+          (edit)="editTask('inProgress', $event)"
+          *ngFor="let task of inProgress"
+          cdkDrag
+          [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
         >
-          <p class="empty-label" *ngIf="todo.length === 0">Empty list</p>
-          <app-task
-            (edit)="editTask('todo', $event)"
-            *ngFor="let task of todo"
-            cdkDrag
-            [task]="task"
-          ></app-task>
-        </mat-card>
-      </div>
-      <div class="container">
-        <h2 style="color: #0d1821; text-align: center; font-size: x-large">
-          Pronto
-        </h2>
-        <mat-card
-          cdkDropList
-          id="inProgress"
-          #inProgressList="cdkDropList"
-          [cdkDropListData]="inProgress"
-          [cdkDropListConnectedTo]="[doneList]"
-          (cdkDropListDropped)="drop($event)"
-          class="list"
-        >
-          <p class="empty-label" *ngIf="inProgress.length === 0">Empty list</p>
-          <app-task
-            (edit)="editTask('inProgress', $event)"
-            *ngFor="let task of inProgress"
-            cdkDrag
-            [task]="task"
-          >
-          </app-task>
-        </mat-card>
-      </div>
-      <div class="container">
-        <h2 style="color: #0d1821; text-align: center; font-size: x-large">
-          Entregue
-        </h2>
-        <mat-card
-          cdkDropList
-          id="done"
-          #doneList="cdkDropList"
-          [cdkDropListData]="done"
-          [cdkDropListConnectedTo]="[todoList, inProgressList]"
-          (cdkDropListDropped)="drop($event)"
-          class="list"
-        >
-          <p class="empty-label" *ngIf="done.length === 0">Empty list</p>
-          <app-task
-            (edit)="editTask('done', $event)"
-            *ngFor="let task of done"
-            cdkDrag
-            [task]="task"
-          ></app-task>
-        </mat-card>
-      </div>
+        </app-task>
+      </mat-card>
+    </div>
+    <div class="container">
+      <h2 style="color: #0d1821; text-align: center; font-size: x-large">
+        Delivered
+      </h2>
+      <mat-card
+        cdkDropList
+        id="done"
+        #doneList="cdkDropList"
+        [cdkDropListData]="done"
+        [cdkDropListConnectedTo]="[]"
+        (cdkDropListDropped)="drop($event)"
+        class="list"
+      >
+        <app-task
+          (edit)="editTask('done', $event)"
+          *ngFor="let task of done"
+          cdkDrag
+          [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
+        ></app-task>
+      </mat-card>
     </div>
   </div>
+</div>

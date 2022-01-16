@@ -6,3 +6,7 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
+
+p {
+  text-align: right;
+}

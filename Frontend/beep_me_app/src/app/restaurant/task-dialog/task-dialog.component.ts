@@ -13,8 +13,8 @@ export class TaskDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:TaskDialogData
     )    { }
   cancel(): void{
-    this.data.task.title=this.backupTask.title;
-    this.data.task.description=this.backupTask.description;
+    this.data.task.id=this.backupTask.id;
+    this.data.task.code=this.backupTask.code;
     this.dialogRef.close(this.data);
   }
   ngOnInit(): void {

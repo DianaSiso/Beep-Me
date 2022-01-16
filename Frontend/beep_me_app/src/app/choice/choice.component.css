@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap%27");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap%27");
 mat-toolbar {
-  margin-bottom: 20px;
+  margin-bottom: 5%;
 }
 
 mat-toolbar > span {
@@ -13,14 +13,18 @@ mat-toolbar > span {
 .content-wrapper {
   max-width: 1400px;
   margin: auto;
+  justify-content: space-evenly;
+  height: auto;
 }
 
 .container-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .container {
+  display: flex;
+  justify-content: space-evenly;
   width: 400px;
   margin: 15px 15px 15px 15px;
 }
@@ -51,4 +55,12 @@ app-new-task {
 }
 .mat-card {
   background-color: #f0f0f0 !important;
+}
+.mat-raised-button {
+  background-color: #bfcc9433;
+  vertical-align: middle;
+  padding: 20%;
+  border-radius: 20%;
+  font-size: large;
+  border: 3px solid #bfcc94 !important;
 }
