@@ -26,13 +26,15 @@
         (cdkDropListDropped)="drop($event)"
         class="list"
       >
-        <p class="empty-label" *ngIf="todo.length === 0">Empty list</p>
         <app-task
           (edit)="editTask('todo', $event)"
           *ngFor="let task of todo"
           (click)="openDialog(task)"
           cdkDrag
           [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
         ></app-task>
       </mat-card>
     </div>
@@ -49,12 +51,14 @@
         (cdkDropListDropped)="drop($event)"
         class="list"
       >
-        <p class="empty-label" *ngIf="inProgress.length === 0">Empty list</p>
         <app-task
           (edit)="editTask('inProgress', $event)"
           *ngFor="let task of inProgress"
           cdkDrag
           [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
         >
         </app-task>
       </mat-card>
@@ -72,12 +76,14 @@
         (cdkDropListDropped)="drop($event)"
         class="list"
       >
-        <p class="empty-label" *ngIf="done.length === 0">Empty list</p>
         <app-task
           (edit)="editTask('done', $event)"
           *ngFor="let task of done"
           cdkDrag
           [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
         ></app-task>
       </mat-card>
     </div>
