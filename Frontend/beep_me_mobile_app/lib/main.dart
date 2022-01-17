@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'elements/elements.dart';
 import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
-//import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,6 +68,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ];
 
   String code = '';
+  final qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? barcode;
+
+  QRViewController? qrViewController;
 
   bool showAvg = false;
   String dropdownValue = "Mcdonalds";
@@ -88,7 +92,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  Widget _displayPage() {
+  Widget _displayPage(BuildContext context) {
     switch (page) {
       case 0:
         {
@@ -96,7 +100,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       case 1:
         {
-          return Container();
+          return qrcodePage(context);
         }
       case 2:
         {
@@ -126,18 +130,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void dispose() {
     controller.dispose();
+    qrViewController?.dispose();
     super.dispose();
   }
-
-  // readQRCode() async {
-  //   String codeRead = await FlutterBarcodeScanner.scanBarcode(
-  //     "#FFFFFF",
-  //     "Cancelar",
-  //     false,
-  //     ScanMode.QR,
-  //   );
-  //   setState(() => code = codeRead != '-1' ? codeRead : 'Não validado');
-  // }
 
   // This method is rerun every time setState is called, for instance as done
   // by the _incrementCounter method above.
@@ -148,7 +143,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         preferredSize: const Size.fromHeight(70.0),
         child: appBar(widget.title),
       ),
-      body: _displayPage(),
+      body: _displayPage(context),
       bottomNavigationBar: bottomAppBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -162,9 +157,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget qrcode() {
-    //readQRCode();
-    return Text(code);
+  Widget qrcodePage(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        qrcode(context),
+        Positioned(
+          bottom: 10,
+          child: buildResult(),
+        )
+      ],
+    );
+  }
+
+  Widget buildResult() => Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8), color: Colors.white24),
+      child: Text(
+        barcode != null ? 'Result :  ${barcode!.code}' : 'Scan a code!',
+        maxLines: 3,
+      ));
+  Widget qrcode(BuildContext context) => QRView(
+        key: qrKey,
+        onQRViewCreated: onQRViewCreated,
+        overlay: QrScannerOverlayShape(
+            borderWidth: 10,
+            borderRadius: 10,
+            borderLength: 20,
+            cutOutSize: MediaQuery.of(context).size.width * 0.8),
+      );
+
+  void onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.qrViewController = controller;
+    });
+    qrViewController?.scannedDataStream
+        .listen((barcode) => setState(() => this.barcode = barcode));
   }
 
   Widget bottomAppBar() {
