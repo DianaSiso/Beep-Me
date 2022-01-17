@@ -241,7 +241,7 @@ public class BusinessLogic {
 
     public Restaurant create_rest(RestForm rest) {
         String name = rest.getName();
-        Integer user_id = rest.getUserID();
+        Integer user_id = rest.getUser_id();
 
         List<Restaurant> rests = restRepository.findByName(name);
 
