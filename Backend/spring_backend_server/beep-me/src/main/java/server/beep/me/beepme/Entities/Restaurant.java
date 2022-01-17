@@ -59,21 +59,23 @@ public class Restaurant {
         this.name = name;
     }
 
-    public Integer getUserId() {
-        return user_id;
-    }
-
-    public void setUserId(Integer user_id) {
-        this.user_id = user_id;
-    }
-
     public Set<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }    
+
+    
     
     
 }
