@@ -24,6 +24,8 @@ import server.beep.me.beepme.Entities.Restaurant;
 import server.beep.me.beepme.Entities.State;
 import server.beep.me.beepme.Entities.User;
 import server.beep.me.beepme.Forms.DelayedForm;
+import server.beep.me.beepme.Forms.LoginForm;
+import server.beep.me.beepme.Forms.LoginResponseForm;
 import server.beep.me.beepme.Forms.OrderForm;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
@@ -49,15 +51,18 @@ public class Beep_Me_Endpoints {
     }
 
      
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<String> login(@RequestParam(name = "username") String username, @RequestParam(name = "pwd") String password, HttpServletRequest request) {
-        this.getUserFromSession(request);
-        boolean response = backend.verifyUser(username, password);
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public LoginResponseForm login(@RequestBody LoginForm loginInfo) {
+        boolean response = backend.verifyUser(loginInfo.getUsername(), loginInfo.getPassword());
 
         if (response) {
-            return ResponseEntity.ok("Login was succssefull!");
+            LoginResponseForm resp = backend.generateLoginResponse(loginInfo);
+            return resp;
         } else {
-            return new ResponseEntity<>("Credentials were wrong!",HttpStatus.FORBIDDEN);
+            LoginResponseForm resp = new LoginResponseForm();
+            resp.setStatus("Credentials are wrong!");
+            resp.setRest_id(-1);
+            return resp;
         }
     }
 

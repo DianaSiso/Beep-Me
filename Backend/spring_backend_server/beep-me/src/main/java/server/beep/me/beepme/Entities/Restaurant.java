@@ -25,6 +25,9 @@ public class Restaurant {
     private Integer id;
 
     @Column
+    private Integer user_id;
+
+    @Column
     private String name;
 
     @JsonManagedReference
@@ -35,8 +38,9 @@ public class Restaurant {
     public Restaurant() {
     }
 
-    public Restaurant(String name) {
+    public Restaurant(String name, Integer user_id) {
         this.name = name;
+        this.user_id = user_id;
     }
 
     public Integer getId() {
@@ -53,6 +57,14 @@ public class Restaurant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getUserId() {
+        return user_id;
+    }
+
+    public void setUserId(Integer userID) {
+        this.user_id = userID;
     }
 
     public Set<Order> getOrders() {

@@ -20,6 +20,8 @@ import server.beep.me.beepme.Entities.Restaurant;
 import server.beep.me.beepme.Entities.State;
 import server.beep.me.beepme.Entities.User;
 import server.beep.me.beepme.Forms.DelayedForm;
+import server.beep.me.beepme.Forms.LoginForm;
+import server.beep.me.beepme.Forms.LoginResponseForm;
 import server.beep.me.beepme.Forms.OrderForm;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
@@ -52,6 +54,18 @@ public class BusinessLogic {
         }
         return false;
         
+    }
+
+    public LoginResponseForm generateLoginResponse(LoginForm loginInfo) {
+
+        LoginResponseForm resp = new LoginResponseForm();
+        ArrayList<User> users = userRepository.findUsersByUsername(loginInfo.getUsername());
+        Integer user_id = users.get(0).getId();
+        Integer rest_id = restRepository.findByUserId(user_id).get(0).getId();
+
+        resp.setRest_id(rest_id);
+        resp.setStatus("Login successfull!");
+        return resp;
     }
 
     public ArrayList<Order> getOrdersByRestID(Integer id) {
@@ -205,25 +219,34 @@ public class BusinessLogic {
         
     }
 
-    public User create_user(UserForm order) {
+    public User create_user(UserForm userForm) {
         boolean manager;
-        if (order.getManager().toLowerCase().equals("true".toLowerCase())) {
+        if (userForm.getManager().toLowerCase().equals("true".toLowerCase())) {
             manager = true;
         } else {
             manager = false;
         }
 
-        User user = new User(order.getUsername(), order.getPassword(), manager);
-        User saved_user = userRepository.save(user);
-        return saved_user;
+        ArrayList<User> users = userRepository.findUsersByUsername(userForm.getUsername());
+
+        if (users.isEmpty()) {
+            User user = new User(userForm.getUsername(), userForm.getPassword(), manager);
+            User saved_user = userRepository.save(user);
+            return saved_user;
+        }
+        
+        return null;
         
     }
 
     public Restaurant create_rest(RestForm rest) {
         String name = rest.getName();
+        Integer user_id = rest.getUserID();
+
         List<Restaurant> rests = restRepository.findByName(name);
+
         if (rests.isEmpty()) {
-            Restaurant to_save = new Restaurant(name);
+            Restaurant to_save = new Restaurant(name, user_id);
             Restaurant saved_rest = restRepository.save(to_save);
     
             return saved_rest;
