@@ -60,11 +60,25 @@ public class BusinessLogic {
 
         LoginResponseForm resp = new LoginResponseForm();
         ArrayList<User> users = userRepository.findUsersByUsername(loginInfo.getUsername());
-        System.out.println(users.toString());
-        Integer user_id = users.get(0).getId();
-        System.out.println(user_id);
-        Integer rest_id = restRepository.findByUserID(user_id).get(0).getId();
-        System.out.println(rest_id);
+        User user = users.get(0);
+
+        if (user ==null) {
+            resp.setRest_id(-1);
+            resp.setStatus("Login not successfull!");
+            return resp;
+        }
+
+        Integer user_id = user.getId();
+        List<Restaurant> rests = restRepository.findByUserID(user_id);
+        Restaurant rest = rests.get(0);
+
+        if(rest == null) {
+            resp.setRest_id(-1);
+            resp.setStatus("Login not successfull!");
+            return resp;
+        }
+
+        Integer rest_id = rest.getId();
 
         resp.setRest_id(rest_id);
         resp.setStatus("Login successfull!");
@@ -244,7 +258,14 @@ public class BusinessLogic {
 
     public Restaurant create_rest(RestForm rest) {
         String name = rest.getName();
-        Integer user_id = rest.getUser_id();
+        List<User> users = userRepository.findByUsername(name);
+
+        User user = users.get(0);
+        if (user == null) {
+            return null;
+        }
+        Integer user_id = user.getId();
+
 
         List<Restaurant> rests = restRepository.findByName(name);
 
