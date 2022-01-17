@@ -2,9 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { ChoiceComponent } from '../choice/choice.component';
+import { ChartsComponent } from '../charts/charts.component';
 const routes: Routes = [
   { path: '', redirectTo: '/choice', pathMatch: 'full' },
+  { path: '', redirectTo: '/charts-component', pathMatch: 'full' },
   { path: 'choice', component: ChoiceComponent },
+  { path: 'charts-component', component: ChartsComponent },
 
 ];
 @Component({
@@ -26,8 +29,13 @@ export class LoginComponent implements OnInit {
   verifyLogin():void{
     this.httpClient.get<any>("http://deti-engsoft-02.ua.pt:8080/login?username="+this.username+"&pwd="+this.pwd).subscribe(response=>{console.log(response);
     if(response.status=="OK"){
-      localStorage.setItem('restID', response.rest_id);
-      this.router.navigate(["/choice"])}
+      if(response.manager=="0"){
+        localStorage.setItem('restID', response.rest_id);
+        this.router.navigate(["/choice"])}
+      else{
+        this.router.navigate(["/charts-component"])
+      }
+    }
     else{
       console.log("Nope");
       this.state="Wrong";
@@ -35,6 +43,8 @@ export class LoginComponent implements OnInit {
   });
   }
   ngOnInit(): void {
+    this.state="";
+    setInterval(()=>{this.state="";},1000);
   }
 
 }
