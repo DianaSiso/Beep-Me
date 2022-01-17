@@ -9,7 +9,7 @@ import server.beep.me.beepme.Entities.Restaurant;
 public interface RestaurantsRepository extends CrudRepository<Restaurant, Integer>{
 
     List<Restaurant> findByName(String name);
-    List<Restaurant> findByUserId(Integer userId);
+    List<Restaurant> findByUserId(String userId);
 
     
 }
