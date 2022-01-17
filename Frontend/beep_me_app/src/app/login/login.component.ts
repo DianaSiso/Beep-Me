@@ -25,7 +25,9 @@ export class LoginComponent implements OnInit {
 
   verifyLogin():void{
     this.httpClient.get<any>("http://deti-engsoft-02.ua.pt:8080/login?username="+this.username+"&pwd="+this.pwd).subscribe(response=>{console.log(response);
-    if(response.status=="OK"){this.router.navigate(["/choice"])}
+    if(response.status=="OK"){
+      localStorage.setItem('restID', response.rest_id);
+      this.router.navigate(["/choice"])}
     else{
       console.log("Nope");
       this.state="Wrong";

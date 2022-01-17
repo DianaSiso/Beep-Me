@@ -13,10 +13,11 @@ export class Restaurante2Component implements OnInit {
   
   title = 'beep-me-web-app';
   todo: Task[] = [];
-  
+  rest_id= localStorage.getItem('rest_id');
+
   constructor(public dialog:MatDialog,private httpClient:HttpClient){}
   fetchData():void{
-    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/orders/restaurant?rest_id=2').subscribe(response=>{console.log(response);
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/orders/restaurant?rest_id='+this.rest_id).subscribe(response=>{console.log(response);
     this.todo=[];
     for (var i=0; i<response.length;i++){
       if(response[i].state == 'ORDERED' || response[i].state == 'LATE'){
