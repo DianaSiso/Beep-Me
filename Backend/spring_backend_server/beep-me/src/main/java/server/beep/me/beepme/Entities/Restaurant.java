@@ -25,7 +25,7 @@ public class Restaurant {
     private Integer id;
 
     @Column
-    private Integer user_id;
+    private Integer userID;
 
     @Column
     private String name;
@@ -38,9 +38,9 @@ public class Restaurant {
     public Restaurant() {
     }
 
-    public Restaurant(String name, Integer user_id) {
+    public Restaurant(String name, Integer userID) {
         this.name = name;
-        this.user_id = user_id;
+        this.userID = userID;
     }
 
     public Integer getId() {
@@ -67,12 +67,12 @@ public class Restaurant {
         this.orders = orders;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserID() {
+        return userID;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUser_id(Integer userID) {
+        this.userID = userID;
     }    
 
     

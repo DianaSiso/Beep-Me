@@ -61,7 +61,7 @@ public class BusinessLogic {
         LoginResponseForm resp = new LoginResponseForm();
         ArrayList<User> users = userRepository.findUsersByUsername(loginInfo.getUsername());
         Integer user_id = users.get(0).getId();
-        Integer rest_id = restRepository.findByUser_id(user_id).get(0).getId();
+        Integer rest_id = restRepository.findByUserID(user_id).get(0).getId();
 
         resp.setRest_id(rest_id);
         resp.setStatus("Login successfull!");
