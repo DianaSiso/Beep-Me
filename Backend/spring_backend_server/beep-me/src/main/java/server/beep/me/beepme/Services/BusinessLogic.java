@@ -64,7 +64,8 @@ public class BusinessLogic {
 
         if (user ==null) {
             resp.setRest_id(-1);
-            resp.setStatus("Login not successfull!");
+            resp.setStatus("FORBIDDEN");
+            resp.setManager(-1);
             return resp;
         }
 
@@ -74,14 +75,20 @@ public class BusinessLogic {
 
         if(rest == null) {
             resp.setRest_id(-1);
-            resp.setStatus("Login not successfull!");
+            resp.setStatus("NOT OWN RESTAURANT");
+            resp.setManager(-1);
             return resp;
         }
 
         Integer rest_id = rest.getId();
 
         resp.setRest_id(rest_id);
-        resp.setStatus("Login successfull!");
+        resp.setStatus("OK");
+        if (user.isManager()) {
+            resp.setManager(1);
+        } else {
+            resp.setManager(0);
+        }
         return resp;
     }
 

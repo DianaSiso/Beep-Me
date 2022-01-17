@@ -60,8 +60,9 @@ public class Beep_Me_Endpoints {
             return resp;
         } else {
             LoginResponseForm resp = new LoginResponseForm();
-            resp.setStatus("Credentials are wrong!");
+            resp.setStatus("FORBIDDEN");
             resp.setRest_id(-1);
+            resp.setManager(-1);
             return resp;
         }
     }

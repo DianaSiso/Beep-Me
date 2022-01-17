@@ -6,12 +6,15 @@ public class LoginResponseForm {
 
     private Integer rest_id;
 
+    private Integer manager;
+
     public LoginResponseForm() {
     }
 
-    public LoginResponseForm(String status, Integer rest_id) {
+    public LoginResponseForm(String status, Integer rest_id, Integer manager) {
         this.status = status;
         this.rest_id = rest_id;
+        this.manager = manager;
     }
 
     public String getStatus() {
@@ -30,5 +33,12 @@ public class LoginResponseForm {
         this.rest_id = rest_id;
     }
 
+    public Integer getManager() {
+        return manager;
+    }
+
+    public void setManager(Integer manager) {
+        this.manager = manager;
+    }
     
 }
