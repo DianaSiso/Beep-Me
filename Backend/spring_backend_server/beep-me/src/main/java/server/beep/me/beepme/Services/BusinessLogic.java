@@ -105,6 +105,13 @@ public class BusinessLogic {
                     if ( diff <= 10) {
                         toReturn.add(order);
                     }
+                } else if (order.getState().toString().equals(State.READY.toString())) {
+                    Duration durationReady = Duration.between(now, delivereDateTime);
+                    durationReady.plusMinutes(30);
+                    long diffReady = Math.abs(duration.toMinutes());
+                    if (diffReady < 0) {
+                        order.setState(State.NON_DELIVERED);
+                    }
                 } else {
                     if (diff < 0) {
                         delivereDateTime.plusMinutes(5);
@@ -238,6 +245,11 @@ public class BusinessLogic {
 
     public User create_user(UserForm userForm) {
         boolean manager;
+        
+        if (userForm.getManager() == null) {
+            return null;
+        }
+
         if (userForm.getManager().toLowerCase().equals("true".toLowerCase())) {
             manager = true;
         } else {
@@ -466,7 +478,7 @@ public class BusinessLogic {
 
     public HashMap<String, Integer> getNumberOfOrdersLateDeliveriesSpecificRestaurants(Integer rest_id) {
 
-        HashMap<String, Integer> rest_to_delivered = new HashMap<>();
+        HashMap<String, Integer> map_to_return = new HashMap<>();
         Optional<Restaurant> rest = restRepository.findById(rest_id);
 
         if (rest.isPresent()) {
@@ -474,12 +486,72 @@ public class BusinessLogic {
             List<Order> orders = ordersRepository.findByRestaurant(restaurant, Sort.unsorted());
             int count = 0;
             for (Order order : orders) if ((order.getState().equals(State.DELIVERED))&& order.getLate()) count ++;
-            rest_to_delivered.put(restaurant.getName(), count);
+            map_to_return.put(restaurant.getName(), count);
         }
         
 
-        return rest_to_delivered;
+        return map_to_return;
 
+    }
+
+    public HashMap<String, Integer> getOrdersNonDeliveredSpecificRestaurants(Integer rest_id) {
+
+        HashMap<String, Integer> map_to_return = new HashMap<>();
+        Optional<Restaurant> rest = restRepository.findById(rest_id);
+
+        if (rest.isPresent()) {
+            Restaurant restaurant = rest.get();
+            List<Order> orders = ordersRepository.findByRestaurant(restaurant, Sort.unsorted());
+            int count = 0;
+            ArrayList<Order> list = new ArrayList<>();
+            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) list.add(order);
+            map_to_return.put(restaurant.getName(), count);
+        }
+        
+
+        return map_to_return;
+
+    }
+
+    public HashMap<String, Integer> getOrdersNonDeliveredAllRestaurants() {
+
+        HashMap<String, Integer> map_to_return = new HashMap<>();
+        Iterable<Restaurant> restaurants = restRepository.findAll();
+
+        for (Restaurant rest: restaurants) {
+            List<Order> orders = ordersRepository.findByRestaurant(rest, Sort.unsorted());
+            int count = 0;
+            ArrayList<Order> list = new ArrayList<>();
+            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) list.add(order);
+            map_to_return.put(rest.getName(), count);
+        }
+
+        return map_to_return;
+
+    }
+
+    public HashMap<String, HashMap<Integer, Integer>> getOrdersPerHour() {
+
+        HashMap<String, HashMap<Integer, Integer>> map_to_return = new HashMap<>();
+        Iterable<Restaurant> restaurants = restRepository.findAll();
+
+        for (Restaurant rest: restaurants) {
+            HashMap<Integer, Integer> hours_map = new HashMap<>();
+            List<Order> orders = ordersRepository.findByRestaurant(rest, Sort.unsorted());
+
+            for (Order order: orders) {
+                LocalDateTime orderedDate = order.getOrderedTime();
+                Integer hour = orderedDate.getHour();
+                if (hours_map.get(hour) != null) {
+                    Integer num = hours_map.get(hour);
+                    hours_map.replace(hour, num+1);
+                } else {
+                    hours_map.put(hour, 1);
+                }
+            }
+            map_to_return.put(rest.getName(), hours_map);
+        }
+        return map_to_return;
     }
 }
     

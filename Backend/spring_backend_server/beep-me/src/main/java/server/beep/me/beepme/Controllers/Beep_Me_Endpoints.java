@@ -227,9 +227,27 @@ public class Beep_Me_Endpoints {
 
     }
 
-    // @RequestMapping(value = "/restaurant/orders/notDelivered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ResponseBody
-    // public HashMap<String, Integer> orders_not_delivered(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
-    
-    // }
+    @RequestMapping(value = "/restaurant/orders/notDelivered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, Integer> orders_not_delivered(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
+        
+        if (rest_id != null) {
+            HashMap<String, Integer> nondeliveredMap = backend.getOrdersNonDeliveredSpecificRestaurants(rest_id);
+            return nondeliveredMap;
+            
+        } else {
+            HashMap<String, Integer> nondeliveredSpecificRestMap = backend.getOrdersNonDeliveredAllRestaurants();
+            return nondeliveredSpecificRestMap;
+        }
+    }
+
+    @RequestMapping(value = "/restaurant/orders/perhour", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, HashMap<Integer, Integer>> orders_per_hour() {
+        
+        HashMap<String, HashMap<Integer, Integer>> preHourMap = backend.getOrdersPerHour();
+        return preHourMap;
+    }
+
+
 }
