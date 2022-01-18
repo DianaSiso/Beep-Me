@@ -177,7 +177,7 @@ public class Beep_Me_Endpoints {
     @ResponseBody
     public HashMap<String, Integer> number_of_orders(@RequestParam(name = "rest_id", required = false) Integer rest_id) {
 
-        if (rest_id != null) {
+        if (rest_id == null) {
             HashMap<String, Integer> rests_to_n_orders_map = backend.getNumberOfOrdersToAllRestaurants();
             return rests_to_n_orders_map;
         } else {
