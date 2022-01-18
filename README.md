@@ -51,9 +51,9 @@ open https://localhost:4200/ on browser
 | ------------------- | ------------- | ------------- |
 | Carlos              | admin1        | Administrator |
 | Sofia               | admin2        | Administrator |
+| mcdonalds           | mc1234donalds | Restaurant    |
 | h3                  | hsrrCmSKTbSN  | Restaurant    |
 | kfc                 | Qz2dN3CKR4vv  | Restaurant    |
-| mcdonalds           | mc1234donalds | Restaurant    |
 | tacobell            | GC6tfrF4Tcgc  | Restaurant    |
 | vitaminas           | JtkzMfX5GPvF  | Restaurant    |
 | aguladoprego        | yEWjVJpGH6ca  | Restaurant    |
