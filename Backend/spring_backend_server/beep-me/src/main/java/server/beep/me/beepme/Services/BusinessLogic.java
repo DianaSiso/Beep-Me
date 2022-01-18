@@ -105,7 +105,7 @@ public class BusinessLogic {
                 LocalDateTime now = LocalDateTime.now();
 
                 Duration duration = Duration.between(now, delivereDateTime);
-                long diff = Math.abs(duration.toMinutes());
+                long diff = duration.toMinutes();
                 System.out.println(diff);
                 if (order.getState().toString().equals(State.DELIVERED.toString())) {
                     
