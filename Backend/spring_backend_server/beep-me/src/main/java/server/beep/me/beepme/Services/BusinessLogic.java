@@ -126,10 +126,12 @@ public class BusinessLogic {
                         if (saved_order == null) {
                             System.out.println("NON DELIVERED NOT SAVED");
                         }
-                        order = saved_order;
-
+                    } else {
+                        toReturn.add(order);
                     }
-                } else {
+                } else if (order.getState().toString().equals(State.NON_DELIVERED.toString())) {
+                    continue;
+                } else {   
                     if (diff < 0) {
                         delivereDateTime.plusMinutes(5);
                         order.setState(State.LATE);
