@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'elements/elements.dart';
 import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+//import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 void main() {
   runApp(const MyApp());
@@ -69,9 +69,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   String code = '';
   final qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? barcode;
+  // Barcode? barcode;
 
-  QRViewController? qrViewController;
+  // QRViewController? qrViewController;
 
   bool showAvg = false;
   String dropdownValue = "Mcdonalds";
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       case 1:
         {
-          return qrcodePage(context);
+          return Container();
         }
       case 2:
         {
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void dispose() {
     controller.dispose();
-    qrViewController?.dispose();
+    // qrViewController?.dispose();
     super.dispose();
   }
 
@@ -157,44 +157,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget qrcodePage(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        qrcode(context),
-        Positioned(
-          bottom: 10,
-          child: buildResult(),
-        )
-      ],
-    );
-  }
+  // Widget qrcodePage(BuildContext context) {
+  //   return Stack(
+  //     alignment: Alignment.center,
+  //     children: <Widget>[
+  //       // qrcode(context),
+  //       // Positioned(
+  //       //   bottom: 10,
+  //       //   child: buildResult(),
+  //       // )
+  //     ],
+  //   );
+  // }
 
-  Widget buildResult() => Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: Colors.white24),
-      child: Text(
-        barcode != null ? 'Result :  ${barcode!.code}' : 'Scan a code!',
-        maxLines: 3,
-      ));
-  Widget qrcode(BuildContext context) => QRView(
-        key: qrKey,
-        onQRViewCreated: onQRViewCreated,
-        overlay: QrScannerOverlayShape(
-            borderWidth: 10,
-            borderRadius: 10,
-            borderLength: 20,
-            cutOutSize: MediaQuery.of(context).size.width * 0.8),
-      );
+  // Widget buildResult() => Container(
+  //     padding: EdgeInsets.all(12),
+  //     decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(8), color: Colors.white24),
+  //     child: Text(
+  //       barcode != null ? 'Result :  ${barcode!.code}' : 'Scan a code!',
+  //       maxLines: 3,
+  //     ));
+  // Widget qrcode(BuildContext context) => QRView(
+  //       key: qrKey,
+  //       onQRViewCreated: onQRViewCreated,
+  //       overlay: QrScannerOverlayShape(
+  //           borderWidth: 10,
+  //           borderRadius: 10,
+  //           borderLength: 20,
+  //           cutOutSize: MediaQuery.of(context).size.width * 0.8),
+  //     );
 
-  void onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.qrViewController = controller;
-    });
-    qrViewController?.scannedDataStream
-        .listen((barcode) => setState(() => this.barcode = barcode));
-  }
+  // void onQRViewCreated(QRViewController controller) {
+  //   setState(() {
+  //     this.qrViewController = controller;
+  //   });
+  //   qrViewController?.scannedDataStream
+  //       .listen((barcode) => setState(() => this.barcode = barcode));
+  // }
 
   Widget bottomAppBar() {
     return BottomAppBar(
