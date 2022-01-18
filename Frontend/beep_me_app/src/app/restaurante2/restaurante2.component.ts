@@ -13,7 +13,7 @@ export class Restaurante2Component implements OnInit {
   
   title = 'beep-me-web-app';
   todo: Task[] = [];
-  rest_id= localStorage.getItem('rest_id');
+  rest_id= localStorage.getItem('restID');
 
   constructor(public dialog:MatDialog,private httpClient:HttpClient){}
   fetchData():void{
