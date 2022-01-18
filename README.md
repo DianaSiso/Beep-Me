@@ -36,6 +36,7 @@ npm install
 npm install chart.js
 ng serve
 ```
+
 open https://localhost:4200/ on browser
 
 ### Run mobile application:
@@ -43,6 +44,36 @@ open https://localhost:4200/ on browser
 ```sh
 
 ```
+
+## User Accounts
+
+| Username            | Password      | Role          |
+| ------------------- | ------------- | ------------- |
+| Carlos              | admin1        | Administrator |
+| Sofia               | admin2        | Administrator |
+| h3                  | hsrrCmSKTbSN  | Restaurant    |
+| kfc                 | Qz2dN3CKR4vv  | Restaurant    |
+| mcdonalds           | mc1234donalds | Restaurant    |
+| tacobell            | GC6tfrF4Tcgc  | Restaurant    |
+| vitaminas           | JtkzMfX5GPvF  | Restaurant    |
+| aguladoprego        | yEWjVJpGH6ca  | Restaurant    |
+| akigrill            | KkDp4kc85Gya  | Restaurant    |
+| oita                | ngPU38sPRxwG  | Restaurant    |
+| domfranguito        | eK8kb2hKWwhe  | Restaurant    |
+| alicarius           | U99WUSdTv7u7  | Restaurant    |
+| bicadaria           | uqpeNs9nLyUa  | Restaurant    |
+| caffelato           | 4bHtmCEp5yzF  | Restaurant    |
+| caseiroebom         | 8uP88yJbJTVE  | Restaurant    |
+| hummy               | mLgkUJVASd3J  | Restaurant    |
+| italianrepublic     | eu24uq9m26mB  | Restaurant    |
+| malguinhasepregos   | e9Nhk54yVchu  | Restaurant    |
+| maniapokebowls      | KQUK96SqX9d6  | Restaurant    |
+| patronopizza        | NFDM7bkHJsze  | Restaurant    |
+| paodivino           | E7p9zkmZxJAj  | Restaurant    |
+| sical               | HK7jE5qst83k  | Restaurant    |
+| sunbufe             | vgqNqECgXZWG  | Restaurant    |
+| tasquinhadobacalhau | PrRnw7HLYbba  | Restaurant    |
+| zedatripa           | 8pVzVte7V2zk  | Restaurant    |
 
 ## Team
 

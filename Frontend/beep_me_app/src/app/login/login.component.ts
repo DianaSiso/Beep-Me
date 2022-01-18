@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { ChoiceComponent } from '../choice/choice.component';
 import { ChartsComponent } from '../charts/charts.component';
-//import * as myGlobals from '../globals';
 const routes: Routes = [
   { path: '', redirectTo: '/choice', pathMatch: 'full' },
   { path: '', redirectTo: '/charts-component', pathMatch: 'full' },
@@ -22,7 +21,6 @@ export class LoginComponent implements OnInit {
   username: string | undefined;
   state="";
 
-  //username=(<HTMLInputElement>document.getElementById("user")).value;
   constructor(private httpClient:HttpClient,public router: Router) {
    }
   user(event:any) {this.username = event.target.value;}
@@ -47,9 +45,8 @@ export class LoginComponent implements OnInit {
   });
   }
   ngOnInit(): void {
-    //console.log(myGlobals.rest_id);
     this.state="";
-    setInterval(()=>{this.state="";},1000);
+    setInterval(()=>{this.state="";},5000);
   }
 
 }
