@@ -88,4 +88,4 @@ open https://localhost:4200/ on browser
 
 - [Report development](https://docs.google.com/document/d/1fu4VGWpGIC-uMgZ5bZGCmADkit5x35v22K9q8SeiTM8/edit?usp=sharing)
 - [Management board](https://projetoies.atlassian.net/jira/software/projects/IES/boards/1)
-- [API documentation](_por link para documentaçao da api_)
+- [API documentation](http://deti-engsoft-02.ua.pt:8080/swagger-ui.html#/)
