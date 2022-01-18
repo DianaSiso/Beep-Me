@@ -1,0 +1,36 @@
+<mat-toolbar color="primary" style="height: 10% !important; text-align: center">
+  <span
+    style="
+      font-family: 'Pacifico';
+      font-size: 50px;
+      font-weight: normal;
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+    "
+    >Beep me<span style="color: white">.</span></span
+  >
+</mat-toolbar>
+<div class="content-wrapper">
+  <div class="container-wrapper">
+    <div class="container">
+      <h2 style="color: #0d1821; text-align: center; font-size: x-large">
+        Orders
+      </h2>
+      <mat-card
+        style="background-color: #f0f0f0 !important"
+        id="pedidos"
+        class="list"
+      >
+        <app-task
+          (click)="openDialog(task)"
+          *ngFor="let task of todo"
+          [task]="task"
+          [style.background]="
+            task.state == 'LATE' ? '#d26464 !important' : '#6ea5ba'
+          "
+        ></app-task>
+      </mat-card>
+    </div>
+  </div>
+</div>
