@@ -106,7 +106,7 @@ public class BusinessLogic {
 
                 Duration duration = Duration.between(now, delivereDateTime);
                 long diff = Math.abs(duration.toMinutes());
-
+                System.out.println(diff);
                 if (order.getState().toString().equals(State.DELIVERED.toString())) {
                     
                     if ( diff <= 10) {
