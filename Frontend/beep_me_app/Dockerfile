@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 RUN npm install
 RUN npm install chart.js
+EXPOSE 4200
 RUN ng serve
 #stage 2
 # FROM nginx:alpine
