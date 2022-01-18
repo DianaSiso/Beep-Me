@@ -274,7 +274,7 @@ public class BusinessLogic {
                 Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
                 Restaurant saved_rest = restRepository.save(to_save);
             }
-            
+
             return saved_user;
         }
         
@@ -307,7 +307,9 @@ public class BusinessLogic {
     }
 
     public Order saveOrder(OrderMessage orderMessage) {
-        List<Restaurant> rest = restRepository.findByName(orderMessage.getRestaurant());
+        String rest_name = orderMessage.getRestaurant().replace(" ", "").replace("'", "").toLowerCase();
+        System.out.println(rest_name);
+        List<Restaurant> rest = restRepository.findByName(rest_name);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
         LocalDateTime ordereDateTime = LocalDateTime.parse(orderMessage.getOrdered(), formatter);
         LocalDateTime previstedDateTime = LocalDateTime.parse(orderMessage.getPrevisted(), formatter);
