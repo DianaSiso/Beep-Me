@@ -118,6 +118,8 @@ public class BusinessLogic {
                     long diffReady = Math.abs(duration.toMinutes());
                     if (diffReady < 0) {
                         order.setState(State.NON_DELIVERED);
+                        Order saved_order = ordersRepository.save(order);
+                        order = saved_order;
                     }
                 } else {
                     if (diff < 0) {
@@ -125,6 +127,8 @@ public class BusinessLogic {
                         order.setState(State.LATE);
                         order.setLate(true);
                         order.setPossibleDeliveryTime(delivereDateTime);
+                        Order saved_order = ordersRepository.save(order);
+                        order = saved_order;
                     }
                     toReturn.add(order);
                 }
