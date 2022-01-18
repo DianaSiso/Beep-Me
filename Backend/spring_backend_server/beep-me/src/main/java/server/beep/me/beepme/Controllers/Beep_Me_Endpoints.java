@@ -71,6 +71,11 @@ public class Beep_Me_Endpoints {
     @RequestMapping(value = "/orders/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<Order> orders_by_restaurant(@RequestParam(name = "rest_id") String rest_id) {
+        
+        if (rest_id == null) {
+            return new ArrayList<Order>();
+        }
+
         Integer id = Integer.parseInt(rest_id);
         ArrayList<Order> orders = backend.getOrdersByRestID(id);
 

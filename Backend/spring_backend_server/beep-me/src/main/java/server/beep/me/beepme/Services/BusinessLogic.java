@@ -60,35 +60,39 @@ public class BusinessLogic {
 
         LoginResponseForm resp = new LoginResponseForm();
         ArrayList<User> users = userRepository.findUsersByUsername(loginInfo.getUsername());
-        User user = users.get(0);
 
-        if (user ==null) {
+        if (users.isEmpty()) {
             resp.setRest_id(-1);
             resp.setStatus("FORBIDDEN");
             resp.setManager(-1);
             return resp;
         }
+        
+        User user = users.get(0);
+
+        if (user.isManager()) {
+            resp.setRest_id(0);
+            resp.setStatus("OK");
+            resp.setManager(1);
+            return resp;
+        } 
 
         Integer user_id = user.getId();
         List<Restaurant> rests = restRepository.findByUserID(user_id);
-        Restaurant rest = rests.get(0);
 
-        if(rest == null) {
+        if (rests.isEmpty()) {
             resp.setRest_id(-1);
             resp.setStatus("NOT OWN RESTAURANT");
             resp.setManager(-1);
             return resp;
         }
+        Restaurant rest = rests.get(0);
 
         Integer rest_id = rest.getId();
 
         resp.setRest_id(rest_id);
         resp.setStatus("OK");
-        if (user.isManager()) {
-            resp.setManager(1);
-        } else {
-            resp.setManager(0);
-        }
+        resp.setManager(0);
         return resp;
     }
 
@@ -115,7 +119,7 @@ public class BusinessLogic {
                 } else if (order.getState().toString().equals(State.READY.toString())) {
                     Duration durationReady = Duration.between(now, delivereDateTime);
                     durationReady.plusMinutes(30);
-                    long diffReady = Math.abs(duration.toMinutes());
+                    long diffReady = duration.toMinutes();
                     if (diffReady < 0) {
                         order.setState(State.NON_DELIVERED);
                         Order saved_order = ordersRepository.save(order);
@@ -272,13 +276,14 @@ public class BusinessLogic {
         if (users.isEmpty()) {
             User user = new User(userForm.getUsername(), userForm.getPassword(), manager);
             User saved_user = userRepository.save(user);
-            List<Restaurant> rests = restRepository.findByName(userForm.getUsername());
+            if (userForm.getManager() == "false") {
+                List<Restaurant> rests = restRepository.findByName(userForm.getUsername());
 
-            if (rests.isEmpty()) {
-                Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
-                Restaurant saved_rest = restRepository.save(to_save);
+                if (rests.isEmpty()) {
+                    Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
+                    Restaurant saved_rest = restRepository.save(to_save);
+                }
             }
-
             return saved_user;
         }
         
