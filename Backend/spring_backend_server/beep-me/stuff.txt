@@ -1,0 +1,49 @@
+insert into User(username, password, manager) values ('h3, 'hsrrCmSKTbSN', 0)
+
+insert into User(username, password, manager) values ('kfc', 'Qz2dN3CKR4vv', 0)
+
+insert into User(username, password, manager) values ('mcdonalds, 'mc1234donalds', 0)
+
+insert into User(username, password, manager) values ('tacobell', 'GC6tfrF4Tcgc', 0)
+
+insert into User(username, password, manager) values ('vitaminas', 'JtkzMfX5GPvF', 0)
+
+insert into User(username, password, manager) values ('aguladoprego', 'yEWjVJpGH6ca', 0)
+
+insert into User(username, password, manager) values ('akigrill', 'KkDp4kc85Gya', 0)
+
+insert into User(username, password, manager) values ('oita', 'ngPU38sPRxwG', 0)
+
+insert into User(username, password, manager) values ('domfranguito', 'eK8kb2hKWwhe', 0)
+
+insert into User(username, password, manager) values ('alicarius', 'U99WUSdTv7u7', 0)
+
+insert into User(username, password, manager) values ('bicadaria', 'uqpeNs9nLyUa', 0)
+
+insert into User(username, password, manager) values ('caffelato', '4bHtmCEp5yzF', 0)
+
+insert into User(username, password, manager) values ('caseiroebom', '8uP88yJbJTVE', 0)
+
+insert into User(username, password, manager) values ('hummy', 'mLgkUJVASd3J', 0)
+
+insert into User(username, password, manager) values ('italianrepublic', 'eu24uq9m26mB', 0)
+
+insert into User(username, password, manager) values ('malguinhasepregos', 'e9Nhk54yVchu', 0)
+
+insert into User(username, password, manager) values ('maniapokebowls', 'KQUK96SqX9d6', 0)
+
+insert into User(username, password, manager) values ('patronopizza', 'NFDM7bkHJsze', 0)
+
+insert into User(username, password, manager) values ('paodivino', 'E7p9zkmZxJAj', 0)
+
+insert into User(username, password, manager) values ('sical', 'HK7jE5qst83k', 0)
+
+insert into User(username, password, manager) values ('sunbufe', 'vgqNqECgXZWG', 0)
+
+insert into User(username, password, manager) values ('tasquinhadobacalhau', 'PrRnw7HLYbba', 0)
+
+insert into User(username, password, manager) values ('zedatripa', '8pVzVte7V2zk', 0)
+
+insert into User(username, password, manager) values ('Carlos', 'admin1', 1)
+
+insert into User(username, password, manager) values ('Sofia', 'admin2', 1)
