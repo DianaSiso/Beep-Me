@@ -123,7 +123,11 @@ public class BusinessLogic {
                     if (diffReady < 0) {
                         order.setState(State.NON_DELIVERED);
                         Order saved_order = ordersRepository.save(order);
+                        if (saved_order == null) {
+                            System.out.println("NON DELIVERED NOT SAVED");
+                        }
                         order = saved_order;
+
                     }
                 } else {
                     if (diff < 0) {
