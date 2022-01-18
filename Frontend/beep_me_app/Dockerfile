@@ -1,12 +1,10 @@
 #stage 1
-FROM node:lts-alpine as node
-RUN npm install -g @angular/cli
+FROM node:latest as node
 WORKDIR /app
 COPY . .
 RUN npm install
 RUN npm install chart.js
-EXPOSE 4200
-RUN ng serve
+RUN npm run build --prod
 #stage 2
-# FROM nginx:alpine
-# COPY --from=node /app/dist/beep-me-app /usr/share/nginx/html
+FROM nginx:alpine
+COPY --from=node /app/dist/beep-me-app /usr/share/nginx/html
