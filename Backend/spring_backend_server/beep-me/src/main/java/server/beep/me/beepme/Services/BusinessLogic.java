@@ -113,7 +113,7 @@ public class BusinessLogic {
                 System.out.println(diff);
                 if (order.getState().toString().equals(State.DELIVERED.toString())) {
                     
-                    if ( diff <= 10) {
+                    if ( diff >= -5) {
                         toReturn.add(order);
                     }
                 } else if (order.getState().toString().equals(State.READY.toString())) {
