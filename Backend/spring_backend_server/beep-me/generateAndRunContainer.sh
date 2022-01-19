@@ -16,6 +16,7 @@ else
     sleep 30
     sudo docker rm beep-me
     sudo docker rmi beep-me-container
+    cd ~/REPO/Beep-Me/Backend/spring_backend_server/beep-me
     # sudo ./mvnw clean install
     sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=beep-me-container
     # sudo docker build -t beep-me-container .
