@@ -23,6 +23,6 @@ else
     # sudo docker build -t beep-me-container .
     #sudo docker run -p 8080:8080 -d --restart unless-stopped --name beep-me beep-me-container 
     sudo docker run -p 8080:8080 --restart unless-stopped --name beep-me beep-me-container 
-    chmod +x insertUsers.sh
-    ./insertUsers.sh
+    # chmod +x insertUsers.sh
+    # ./insertUsers.sh
 fi
