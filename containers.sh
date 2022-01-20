@@ -35,7 +35,7 @@ if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
                 sudo docker rm $CONTAINER_NAME
                 sudo ./mvnw clean install
                 sudo docker build -t data-stream-image .
-                sudo docker run -p 9000:9000 --name $CONTAINER_NAME data-stream-image --rest=$line
+                sudo docker run -p 9000:9000 -d --restart unless-stopped --name $CONTAINER_NAME data-stream-image --rest=$line
             done < "$input"
             
         fi
