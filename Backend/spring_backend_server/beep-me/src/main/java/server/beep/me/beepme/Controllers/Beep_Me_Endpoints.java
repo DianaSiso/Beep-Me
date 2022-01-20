@@ -67,6 +67,22 @@ public class Beep_Me_Endpoints {
         }
     }
 
+    @RequestMapping(value = "/orders/code", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Order orders_by_code(@RequestParam(name = "code") String code) {
+        
+        if (code == null) {
+            return new Order();
+        }
+        Order order = backend.getOrderByCode(code);
+
+        if (order == null) {
+            return new Order();
+        } else {
+            return order;
+        }
+    }
+
      
     @RequestMapping(value = "/orders/restaurant", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
