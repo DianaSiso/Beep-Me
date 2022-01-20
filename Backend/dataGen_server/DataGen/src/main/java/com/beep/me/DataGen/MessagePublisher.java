@@ -25,19 +25,18 @@ public class MessagePublisher {
     @Scheduled(fixedRate = 30000)
     @GetMapping("/publish")
     public String publishOrder() {
-
-        if (range.getProbability(LocalDateTime.now().getHour())){
-
-            System.out.println(rest);
+        boolean send = range.getProbability(LocalDateTime.now().getHour());
+        if (send){
         
             DataGen dataGen = new DataGen();
 
-            Order toSendOrder  = dataGen.getOrder();
+            Order toSendOrder  = dataGen.getOrder(rest);
 
             template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, toSendOrder);
 
             return "Order Published!";
         }
+        System.out.print("Order not Published!");
         return "Order not published";
 
     }

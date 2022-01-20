@@ -112,7 +112,7 @@ public class DataGen {
         throw new RuntimeException("Should never be shown.");
     }
 
-    public Order getOrder() {
+    public Order getOrder(String rest) {
         HashMap<String, Double> restaurants = getRestMap();
         HashMap<String, Double> dur = getDurationMap();
 
@@ -120,7 +120,7 @@ public class DataGen {
 
             
         // }
-        String restaurant = chooseOnWeight(restaurants);
+        //String restaurant = chooseOnWeight(restaurants);
         String duration = chooseOnWeight(dur);
 
         LocalDateTime date = LocalDateTime.now();
@@ -140,7 +140,7 @@ public class DataGen {
         
         String code = getAlphaNumericString(10);
 
-        Order order = new Order(code, restaurant, formatDateTime, predString);
+        Order order = new Order(code, rest, formatDateTime, predString);
 
         return order;
     }
