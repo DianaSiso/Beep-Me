@@ -58,12 +58,13 @@ else
     # sudo docker build -t beep-me-container .
     sudo docker run -p 8080:8080 -d --restart unless-stopped --name beep-me beep-me-container 
     chmod +x insertUsers.sh
+    sleep 30
     ./insertUsers.sh
 
     cd ~/REPO/Beep-Me/Backend/dataGen_server/DataGen
     sudo docker rmi data-stream-image
     #sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=data-stream-image
-    input="list.txt"
+    input="res_list.txt"
     while IFS= read -r line
     do
         CONTAINER_NAME="data-stream-container-"
