@@ -43,10 +43,10 @@ if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
     
 else
     echo "Database and Message Broker are not running!"
+    cd ~/REPO/Beep-Me/Backend/DB
     sudo docker rm db_db_1
     sudo docker rm rabbitMQContainer
     sudo rm -rf db_data
-    cd ~/REPO/Beep-Me/Backend/DB
     sudo docker-compose up -d
     sleep 30
     sudo docker rm beep-me
