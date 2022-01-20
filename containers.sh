@@ -7,7 +7,7 @@ DATA_STREAM_CONTAINER_NAME="data-stream-container"
 
 if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
     echo "Database and Message Broker already running!"
-    if ["$SERVER_CONTAINER" = "$SERVER_CONTAINER_NAME"]; then 
+    if [ "$SERVER_CONTAINER" = "$SERVER_CONTAINER_NAME" ]; then 
         echo "Server container already running!"
     else
         echo "Server container is not running!"
@@ -19,7 +19,7 @@ if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
         # sudo docker build -t beep-me-container .
         sudo docker run -p 8080:8080 -d --restart unless-stopped --name server-container server-image
 
-        if ["$DATA_STREAM_CONTAINER" = "$DATA_STREAM_CONTAINER_NAME"]; then
+        if [ "$DATA_STREAM_CONTAINER" = "$DATA_STREAM_CONTAINER_NAME" ]; then
             echo "Data Stream container already running!"
         else
             echo "Data Stream container is not running!"
