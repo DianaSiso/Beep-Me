@@ -54,9 +54,12 @@ else
 
     cd ~/REPO/Beep-Me/Backend/spring_backend_server/beep-me
     # sudo ./mvnw clean install
-    sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=beep-me-container
+    sudo docker stop server-container
+    sudo docker rm server-container
+    sudo docker rmi server-image
+    sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=server-image
     # sudo docker build -t beep-me-container .
-    sudo docker run -p 8080:8080 -d --restart unless-stopped --name beep-me beep-me-container 
+    sudo docker run -p 8080:8080 -d --restart unless-stopped --name server-container server-image
     chmod +x insertUsers.sh
     sleep 30
     ./insertUsers.sh
