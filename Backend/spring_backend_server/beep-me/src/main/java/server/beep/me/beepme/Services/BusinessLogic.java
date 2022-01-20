@@ -96,6 +96,11 @@ public class BusinessLogic {
         return resp;
     }
 
+    public Order getOrderByCode(String code) {
+        Order order = ordersRepository.findByCode(code);
+        return order;
+    }
+
     public ArrayList<Order> getOrdersByRestID(Integer id) {
         Optional<Restaurant> rest_opt = restRepository.findById(id);
 
@@ -288,6 +293,7 @@ public class BusinessLogic {
                 if (rests.isEmpty()) {
                     Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
                     Restaurant saved_rest = restRepository.save(to_save);
+                    System.out.print("REST CREATED!");
                 }
             }
             return saved_user;
