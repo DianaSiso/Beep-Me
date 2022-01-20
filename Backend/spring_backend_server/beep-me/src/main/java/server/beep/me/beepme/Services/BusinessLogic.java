@@ -287,9 +287,10 @@ public class BusinessLogic {
         if (users.isEmpty()) {
             User user = new User(userForm.getUsername(), userForm.getPassword(), manager);
             User saved_user = userRepository.save(user);
+            System.out.println(userForm.getManager());
             if (userForm.getManager() == "false") {
                 List<Restaurant> rests = restRepository.findByName(userForm.getUsername());
-
+                System.out.println(rests.size());
                 if (rests.isEmpty()) {
                     Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
                     Restaurant saved_rest = restRepository.save(to_save);
