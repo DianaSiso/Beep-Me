@@ -287,8 +287,8 @@ public class BusinessLogic {
         if (users.isEmpty()) {
             User user = new User(userForm.getUsername(), userForm.getPassword(), manager);
             User saved_user = userRepository.save(user);
-            System.out.println(userForm.getManager());
-            if (userForm.getManager() == "false") {
+            System.out.println(userForm.getManager().equals("false"));
+            if (userForm.getManager().equals("false")) {
                 System.out.println("READY TO FETCH FROM DB");
                 List<Restaurant> rests = restRepository.findByName(userForm.getUsername());
                 System.out.println(rests.size());
