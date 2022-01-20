@@ -64,7 +64,7 @@ else
     cd ~/REPO/Beep-Me/Backend/dataGen_server/DataGen
     sudo docker rmi data-stream-image
     #sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=data-stream-image
-    input="res_list.txt"
+    input="rest_list.txt"
     while IFS= read -r line
     do
         CONTAINER_NAME="data-stream-container-"
