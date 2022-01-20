@@ -26,7 +26,7 @@ if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
             cd ~/REPO/Beep-Me/Backend/dataGen_server/DataGen
 
             sudo docker rmi data-stream-image
-            input="rest_list.txt"
+            input="light_version_rest_list.txt"
             COUNTER=0
             sudo ./mvnw clean install
             sudo docker build -t data-stream-image .
@@ -37,7 +37,7 @@ if [ "$DB_CONTAINER_NAME" = "$DB_CONTAINER" ]; then
                 sudo docker rm $CONTAINER_NAME
                 
                 port=$(expr 9000 + $COUNTER)
-                sudo docker run -p $COUNTER:9000 -d --restart unless-stopped --name $CONTAINER_NAME data-stream-image --rest=$line
+                sudo docker run -p $port:9000 -d --restart unless-stopped --name $CONTAINER_NAME data-stream-image --rest=$line
                 let COUNTER++
             done < "$input"
             
@@ -70,7 +70,7 @@ else
     cd ~/REPO/Beep-Me/Backend/dataGen_server/DataGen
     sudo docker rmi data-stream-image
     #sudo ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=data-stream-image
-    input="rest_list.txt"
+    input="light_version_rest_list.txt"
     COUNTER=0
     sudo ./mvnw clean install
     sudo docker build -t data-stream-image .
@@ -81,7 +81,7 @@ else
         sudo docker rm $CONTAINER_NAME
         
         port=$(expr 9000 + $COUNTER)
-        sudo docker run -p $COUNTER:9000 -d --restart unless-stopped --name $CONTAINER_NAME data-stream-image --rest=$line
+        sudo docker run -p $port:9000 -d --restart unless-stopped --name $CONTAINER_NAME data-stream-image --rest=$line
         let COUNTER++
     done < "$input"
 fi
