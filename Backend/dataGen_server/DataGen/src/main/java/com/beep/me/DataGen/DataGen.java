@@ -120,7 +120,13 @@ public class DataGen {
 
             
         // }
-        //String restaurant = chooseOnWeight(restaurants);
+        
+        String restaurant;
+        if (rest.equals("nothing")) {
+            restaurant = chooseOnWeight(restaurants);
+        } else {
+            restaurant = rest;
+        }
         String duration = chooseOnWeight(dur);
 
         LocalDateTime date = LocalDateTime.now();
@@ -140,7 +146,7 @@ public class DataGen {
         
         String code = getAlphaNumericString(10);
 
-        Order order = new Order(code, rest, formatDateTime, predString);
+        Order order = new Order(code, restaurant, formatDateTime, predString);
 
         return order;
     }
