@@ -3,6 +3,7 @@ package server.beep.me.beepme.Forms;
 public class OrderMobile {
 
     private String code;
+    private Integer orderID;
     private Integer restaurant_id;
     private String restaurantName;
     private String possibleDeliveryTime;
@@ -11,9 +12,10 @@ public class OrderMobile {
     public OrderMobile() {
     }
 
-    public OrderMobile(String code, Integer restaurant_id, String restaurantName, String possibleDeliveryTime,
+    public OrderMobile(String code, Integer orderID, Integer restaurant_id, String restaurantName, String possibleDeliveryTime,
             String state) {
         this.code = code;
+        this.orderID = orderID;
         this.restaurant_id = restaurant_id;
         this.restaurantName = restaurantName;
         this.possibleDeliveryTime = possibleDeliveryTime;
@@ -60,5 +62,14 @@ public class OrderMobile {
         this.state = state;
     }
 
+    public Integer getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
+    }
+
+    
     
 }

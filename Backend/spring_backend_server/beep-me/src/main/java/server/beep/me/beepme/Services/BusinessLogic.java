@@ -100,7 +100,7 @@ public class BusinessLogic {
     public OrderMobile getOrderByCode(String code) {
         Order order = ordersRepository.findByCode(code);
         Restaurant rest = order.getRestaurant();
-        OrderMobile orderMobile = new OrderMobile(order.getCode(), rest.getId(), rest.getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
+        OrderMobile orderMobile = new OrderMobile(order.getCode(), order.getId(), rest.getId(), rest.getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
         return orderMobile;
     }
 
