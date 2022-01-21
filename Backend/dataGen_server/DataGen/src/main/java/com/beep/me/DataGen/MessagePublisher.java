@@ -26,6 +26,7 @@ public class MessagePublisher {
     @GetMapping("/publish")
     public String publishOrder() {
         boolean send = range.getProbability(LocalDateTime.now().getHour());
+        System.out.println(send);
         if (send){
         
             DataGen dataGen = new DataGen();
@@ -34,6 +35,7 @@ public class MessagePublisher {
 
             template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, toSendOrder);
 
+            System.out.print("Order Published!");
             return "Order Published!";
         }
         System.out.print("Order not Published!");
