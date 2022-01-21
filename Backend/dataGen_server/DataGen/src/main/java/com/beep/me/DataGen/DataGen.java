@@ -122,7 +122,7 @@ public class DataGen {
         // }
         
         String restaurant;
-        if (rest.equals("nothing")) {
+        if (rest.equals("32")) {
             restaurant = chooseOnWeight(restaurants);
         } else {
             restaurant = rest;
