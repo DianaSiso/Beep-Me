@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'elements/elements.dart';
@@ -72,6 +74,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Barcode? barcode;
   bool codeRead = false;
 
+  List orders = [];
+
   QRViewController? qrViewController;
 
   bool showAvg = false;
@@ -100,12 +104,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     switch (page) {
       case 0:
         {
-          return homePage();
+          return homePage(orders);
         }
       case 1:
         {
           if (codeRead) {
-            return homePage();
+            return homePage(orders);
           } else {
             return qrcodePage(context);
           }
@@ -116,34 +120,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       default:
         {
-          return homePage();
+          return homePage(orders);
         }
     }
   }
 
-  late AnimationController controller;
-
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat(reverse: true);
     super.initState();
   }
 
   @override
   void dispose() {
-    controller.dispose();
     qrViewController?.dispose();
     super.dispose();
   }
 
-  // This method is rerun every time setState is called, for instance as done
-  // by the _incrementCounter method above.
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      qrViewController!.pauseCamera();
+    }
+    qrViewController!.resumeCamera();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,6 +164,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation
           .centerDocked, // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Widget homePage(List orders) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            shoopingNameCard(),
+            const Padding(
+              padding: EdgeInsets.only(left: 30, bottom: 5),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Orders",
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+            ),
+            pedidosCard(2, orders)
+          ],
+        ));
   }
 
   Widget qrcodePage(BuildContext context) {
@@ -195,15 +217,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             borderLength: 20,
             cutOutSize: MediaQuery.of(context).size.width * 0.8),
       );
-
   void onQRViewCreated(QRViewController controller) {
     setState(() {
-      this.qrViewController = controller;
+      qrViewController = controller;
     });
-    qrViewController?.scannedDataStream.listen((barcode) => setState(() {
-          this.barcode = barcode;
-          this.codeRead = true;
-        }));
+    qrViewController?.scannedDataStream.listen((barcode) {
+      if (!orders.contains(barcode.code!)) {
+        orders = orders.toList();
+        orders.add(barcode.code!);
+      }
+      setState(() {
+        this.codeRead = true;
+      });
+    });
   }
 
   Widget bottomAppBar() {
@@ -229,27 +255,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
     );
-  }
-
-  Widget homePage() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-            shoopingNameCard(),
-            const Padding(
-              padding: EdgeInsets.only(left: 30, bottom: 5),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Orders",
-                  style: TextStyle(fontSize: 30),
-                ),
-              ),
-            ),
-            pedidosCard(2, controller)
-          ],
-        ));
   }
 
   Widget chartPage() {
