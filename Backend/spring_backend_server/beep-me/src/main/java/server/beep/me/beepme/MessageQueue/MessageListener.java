@@ -15,6 +15,7 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE)
     public void listener(OrderMessage order) {
+        System.out.println(order.toString());
         Order savedOrder= backend.saveOrder(order);
         
         if (savedOrder == null) {
