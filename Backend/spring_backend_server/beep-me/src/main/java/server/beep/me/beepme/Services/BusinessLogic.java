@@ -23,6 +23,7 @@ import server.beep.me.beepme.Forms.DelayedForm;
 import server.beep.me.beepme.Forms.LoginForm;
 import server.beep.me.beepme.Forms.LoginResponseForm;
 import server.beep.me.beepme.Forms.OrderForm;
+import server.beep.me.beepme.Forms.OrderMobile;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Forms.UserForm;
@@ -96,9 +97,11 @@ public class BusinessLogic {
         return resp;
     }
 
-    public Order getOrderByCode(String code) {
+    public OrderMobile getOrderByCode(String code) {
         Order order = ordersRepository.findByCode(code);
-        return order;
+        Restaurant rest = order.getRestaurant();
+        OrderMobile orderMobile = new OrderMobile(order.getCode(), rest.getId(), rest.getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
+        return orderMobile;
     }
 
     public ArrayList<Order> getOrdersByRestID(Integer id) {
