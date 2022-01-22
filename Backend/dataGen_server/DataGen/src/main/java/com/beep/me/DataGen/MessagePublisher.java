@@ -31,7 +31,7 @@ public class MessagePublisher {
         
             DataGen dataGen = new DataGen();
 
-            Order toSendOrder  = dataGen.getOrder(rest);
+            Order toSendOrder  = dataGen.getOrder();
 
             template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, toSendOrder);
 

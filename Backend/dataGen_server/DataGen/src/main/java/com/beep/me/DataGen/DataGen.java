@@ -112,7 +112,7 @@ public class DataGen {
         throw new RuntimeException("Should never be shown.");
     }
 
-    public Order getOrder(String rest) {
+    public Order getOrder() {
         HashMap<String, Double> restaurants = getRestMap();
         HashMap<String, Double> dur = getDurationMap();
 
