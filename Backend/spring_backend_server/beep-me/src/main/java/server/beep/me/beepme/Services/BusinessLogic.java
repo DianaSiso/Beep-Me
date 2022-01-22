@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import server.beep.me.beepme.Forms.OrderMobile;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Forms.UserForm;
+import server.beep.me.beepme.MessageQueue.MQConfig;
 import server.beep.me.beepme.MessageQueue.OrderMessage;
 import server.beep.me.beepme.Respositories.OrdersRepository;
 import server.beep.me.beepme.Respositories.RestaurantsRepository;
@@ -43,6 +45,10 @@ public class BusinessLogic {
 
     @Autowired
     OrdersRepository ordersRepository;
+
+    @Autowired
+    private RabbitTemplate template;
+    
 
     public boolean verifyUser(String username, String pwd) {
 
@@ -104,6 +110,11 @@ public class BusinessLogic {
         return orderMobile;
     }
 
+    public void sendNotification(Order order) {
+        OrderMobile toSendOrder = new OrderMobile(order.getCode(), order.getId(), order.getRestaurant().getId(), order.getRestaurant().getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY_NOTIFICATION, toSendOrder);
+    }
+
     public ArrayList<Order> getOrdersByRestID(Integer id) {
         Optional<Restaurant> rest_opt = restRepository.findById(id);
 
@@ -135,6 +146,7 @@ public class BusinessLogic {
                             System.out.println("NON DELIVERED NOT SAVED");
                         }
                     } else {
+                        sendNotification(order);
                         toReturn.add(order);
                     }
                 } else if (order.getState().toString().equals(State.NON_DELIVERED.toString())) {
