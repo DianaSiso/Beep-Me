@@ -32,7 +32,7 @@ public class MessagePublisher {
             DataGen dataGen = new DataGen();
 
             Order toSendOrder  = dataGen.getOrder();
-
+            System.out.println(toSendOrder.getRestaurant());
             template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, toSendOrder);
 
             System.out.print("Order Published!");
