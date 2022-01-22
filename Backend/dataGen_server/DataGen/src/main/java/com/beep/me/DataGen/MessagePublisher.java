@@ -22,11 +22,11 @@ public class MessagePublisher {
 
     private static Range range = new Range();
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 5000)
     @GetMapping("/publish")
     public String publishOrder() {
         boolean send = range.getProbability(LocalDateTime.now().getHour());
-        System.out.println(send);
+        System.out.println("SENDING: " + send);
         if (send){
         
             DataGen dataGen = new DataGen();
