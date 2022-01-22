@@ -105,6 +105,9 @@ public class BusinessLogic {
 
     public OrderMobile getOrderByCode(String code) {
         Order order = ordersRepository.findByCode(code);
+        if (order == null) {
+            return new OrderMobile();
+        }
         Restaurant rest = order.getRestaurant();
         OrderMobile orderMobile = new OrderMobile(order.getCode(), order.getId(), rest.getId(), rest.getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
         return orderMobile;
