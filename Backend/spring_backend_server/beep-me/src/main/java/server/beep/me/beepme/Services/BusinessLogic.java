@@ -141,7 +141,7 @@ public class BusinessLogic {
                 } else if (order.getState().toString().equals(State.READY.toString())) {
                     Duration durationReady = Duration.between(now, delivereDateTime);
                     durationReady.plusMinutes(30);
-                    long diffReady = duration.toMinutes();
+                    long diffReady = durationReady.toMinutes();
                     if (diffReady < 0) {
                         order.setState(State.NON_DELIVERED);
                         Order saved_order = ordersRepository.save(order);
