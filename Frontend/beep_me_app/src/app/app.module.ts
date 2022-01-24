@@ -23,6 +23,11 @@ import { RestDialogComponent } from './restaurante2/rest-dialog/rest-dialog.comp
 import { RestDialogComponent2 } from './restaurant/rest-dialog/rest-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChoiceComponent } from './choice/choice.component';
+import { ChartsComponent } from './charts/charts.component';
+import { RouterModule } from '@angular/router'
+import { RestaurantsComponent } from './restaurants';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +38,10 @@ import { ChoiceComponent } from './choice/choice.component';
     Restaurante2Component,
     RestDialogComponent,
     RestDialogComponent2,
-    ChoiceComponent
+    ChoiceComponent,
+    ChartsComponent,
+    RestaurantsComponent
+
   ],
   entryComponents: [RestDialogComponent],
   imports: [
@@ -50,7 +58,9 @@ import { ChoiceComponent } from './choice/choice.component';
     FormsModule,
     MatDialogModule,
     DragDropModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
