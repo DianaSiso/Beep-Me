@@ -1,0 +1,26 @@
+.main{
+  margin: 1em;
+}
+
+#restaurantMonth{
+  width: 400% ;
+
+}
+#restaurantStates{
+  width: 400% ;
+
+}
+.First{
+  float:left;
+}
+.Second{
+  float: right;
+}
+
+.aligned{
+ display: flex;
+ flex-direction: row;
+}
+
+
+
