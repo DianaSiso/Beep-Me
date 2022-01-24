@@ -7,14 +7,13 @@ import 'package:http/http.dart' as http;
 
 import 'elements.dart';
 
-Widget createOrderCard(
-  String code,
-) {
+Widget createOrderCard(String code) {
   return FutureBuilder(
     builder: (context, orderRet) {
-      print(orderRet.data);
+      print("DATA: " + orderRet.data.toString());
       if (orderRet.hasData) {
         Order order = orderRet.data as Order;
+        DateTime delivery = order.getDeliveryDate();
         return Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
@@ -40,13 +39,13 @@ Widget createOrderCard(
               left: 20,
               right: 20,
             ),
-            height: 150,
+            height: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.only(top: 25),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -56,30 +55,34 @@ Widget createOrderCard(
                   ),
                 ),
                 // Padding(
-                //   padding: const EdgeInsets.only(bottom: 20),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Expanded(
-                //         child: Padding(
-                //           padding: const EdgeInsets.all(20),
-                //           child: LinearProgressIndicator(
-                //             value: progressBarController.value,
-                //           ),
-                //         ),
-                //       ),
-                //       Container(
-                //           margin: const EdgeInsets.only(right: 20),
-                //           decoration: BoxDecoration(
-                //               color: const Color(0xffB4CDED),
-                //               borderRadius: BorderRadius.circular(30)),
-                //           child: const Padding(
-                //             padding: EdgeInsets.all(10.0),
-                //             child: Icon(Icons.done_rounded, color: Colors.white),
-                //           ))
-                //     ],
+                //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                //   child: Container(
+                //     child: const LinearProgressIndicator(
+                //       value: m,
+                //       valueColor:
+                //           AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+                //     ),
                 //   ),
-                // )
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      stateOrder(order.getState()),
+                      Container(
+                          margin: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                              color: const Color(0xffB4CDED),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child:
+                                Icon(Icons.done_rounded, color: Colors.white),
+                          ))
+                    ],
+                  ),
+                )
               ],
             ));
       }
@@ -97,12 +100,20 @@ Future<Order?> fetchOrderInfo(String? code) async {
 
   Map<String, dynamic> order = jsonDecode(response.body);
   log(response.body);
-  int orderNumber = order["id"];
+  if (order["code"] == null) {
+    return null;
+  }
+  int orderNumber = order["orderID"];
   String finalCode = order["code"];
+  String restName = order["restaurantName"];
+  restName =
+      "${restName[0].toUpperCase()}${restName.substring(1).toLowerCase()}";
+  int restID = order["restaurant_id"];
   String deliveryDate = order["possibleDeliveryTime"];
   DateTime parsedDate = DateTime.parse(deliveryDate);
+  String state = order["state"];
 
-  Order orderObj = new Order(finalCode, orderNumber, "none", 1, parsedDate);
-
+  Order orderObj =
+      Order(finalCode, orderNumber, restName, restID, parsedDate, state);
   return orderObj;
 }

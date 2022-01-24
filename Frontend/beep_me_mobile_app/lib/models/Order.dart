@@ -4,9 +4,10 @@ class Order {
   String restaurant;
   int restaurantID;
   DateTime deliveryDate;
+  String state;
 
   Order(this.code, this.orderNumber, this.restaurant, this.restaurantID,
-      this.deliveryDate);
+      this.deliveryDate, this.state);
 
   String getCode() {
     return code;
@@ -38,4 +39,10 @@ class Order {
 
   void setDeliveryDate(DateTime deliveryDate) =>
       this.deliveryDate = deliveryDate;
+
+  String getState() {
+    return state;
+  }
+
+  void setState(String state) => this.state = state;
 }

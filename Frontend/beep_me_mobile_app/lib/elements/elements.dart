@@ -91,7 +91,6 @@ Widget pedidosCard(int itemCount, List orders) {
       itemCount: orders.length,
       itemBuilder: (BuildContext context, int index) {
         String order = orders[index];
-        log(order);
         return createOrderCard(order);
       },
     ),
@@ -126,16 +125,72 @@ Widget appBar(String title) {
 }
 
 Widget titleNameRestaurant(String name) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 20),
-    child:
-        Text(name, style: const TextStyle(color: Colors.white, fontSize: 25)),
+  int nameLength = name.length;
+  log(nameLength.toString());
+  return Container(
+    padding: const EdgeInsets.all(5),
+    decoration: const BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
+    child: Padding(
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      child: Text(name,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: nameLength > 10
+                  ? 16
+                  : nameLength > 8
+                      ? 25
+                      : 35)),
+    ),
+  );
+}
+
+Widget stateOrder(String state) {
+  state = "${state[0].toUpperCase()}${state.substring(1).toLowerCase()}";
+  Color color = state == "Ordered" ? Colors.black : Colors.white;
+  Color titleColor = Colors.black;
+  Color? backgroundColor = state == "Late"
+      ? Colors.red[300]
+      : state == "Ordered"
+          ? Colors.amber[200]
+          : state == "Ready"
+              ? Colors.green[300]
+              : Colors.green[300];
+  return Container(
+    margin: const EdgeInsets.only(left: 20),
+    decoration: BoxDecoration(
+        color: backgroundColor, borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "State of order: ",
+            style: TextStyle(color: titleColor),
+          ),
+          Text(state, style: TextStyle(color: color, fontSize: 20)),
+        ],
+      ),
+    ),
   );
 }
 
 Widget numOrder(String num) {
-  return Padding(
-    padding: const EdgeInsets.only(right: 20),
-    child: Text(num, style: const TextStyle(color: Colors.white, fontSize: 25)),
+  int lenghtOrder = num.length;
+  return Container(
+    padding: const EdgeInsets.all(5),
+    decoration: const BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
+    child: Padding(
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      child: Text(num,
+          style: TextStyle(
+              color: Colors.white, fontSize: lenghtOrder >= 3 ? 25 : 35)),
+    ),
   );
 }
