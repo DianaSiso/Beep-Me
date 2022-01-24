@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:beep_me_mobile_app/elements/orderCard.dart';
+import 'package:beep_me_mobile_app/models/Order.dart';
 import 'package:flutter/material.dart';
 
 Widget bottomAppBar() {
@@ -81,79 +85,13 @@ Widget shoopingNameCard() {
   );
 }
 
-Widget pedidosCard(int itemCount, AnimationController progressBarController) {
+Widget pedidosCard(int itemCount, List orders) {
   return Expanded(
     child: ListView.builder(
-      itemCount: itemCount,
+      itemCount: orders.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: const Color(0xff344966),
-                // gradient: const LinearGradient(
-                //   begin: Alignment.bottomLeft,
-                //   end: Alignment.topRight,
-                //   colors: [
-                //     Color(0xffB4CDED),
-                //     Color(0xff0D1821),
-                //   ],
-                // )
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 15,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ]),
-            margin: const EdgeInsets.only(
-              top: 15,
-              left: 20,
-              right: 20,
-            ),
-            height: 150,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      titleNameRestaurant("McDonalds"),
-                      numOrder("35")
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: LinearProgressIndicator(
-                            value: progressBarController.value,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                              color: const Color(0xffB4CDED),
-                              borderRadius: BorderRadius.circular(30)),
-                          child: const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child:
-                                Icon(Icons.done_rounded, color: Colors.white),
-                          ))
-                    ],
-                  ),
-                )
-              ],
-            ));
+        String order = orders[index];
+        return createOrderCard(order);
       },
     ),
   );
@@ -187,16 +125,72 @@ Widget appBar(String title) {
 }
 
 Widget titleNameRestaurant(String name) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 20),
-    child:
-        Text(name, style: const TextStyle(color: Colors.white, fontSize: 25)),
+  int nameLength = name.length;
+  log(nameLength.toString());
+  return Container(
+    padding: const EdgeInsets.all(5),
+    decoration: const BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
+    child: Padding(
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      child: Text(name,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: nameLength > 10
+                  ? 16
+                  : nameLength > 8
+                      ? 25
+                      : 35)),
+    ),
+  );
+}
+
+Widget stateOrder(String state) {
+  state = "${state[0].toUpperCase()}${state.substring(1).toLowerCase()}";
+  Color color = state == "Ordered" ? Colors.black : Colors.white;
+  Color titleColor = Colors.black;
+  Color? backgroundColor = state == "Late"
+      ? Colors.red[300]
+      : state == "Ordered"
+          ? Colors.amber[200]
+          : state == "Ready"
+              ? Colors.green[300]
+              : Colors.green[300];
+  return Container(
+    margin: const EdgeInsets.only(left: 20),
+    decoration: BoxDecoration(
+        color: backgroundColor, borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "State of order: ",
+            style: TextStyle(color: titleColor),
+          ),
+          Text(state, style: TextStyle(color: color, fontSize: 20)),
+        ],
+      ),
+    ),
   );
 }
 
 Widget numOrder(String num) {
-  return Padding(
-    padding: const EdgeInsets.only(right: 20),
-    child: Text(num, style: const TextStyle(color: Colors.white, fontSize: 25)),
+  int lenghtOrder = num.length;
+  return Container(
+    padding: const EdgeInsets.all(5),
+    decoration: const BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
+    child: Padding(
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      child: Text(num,
+          style: TextStyle(
+              color: Colors.white, fontSize: lenghtOrder >= 3 ? 25 : 35)),
+    ),
   );
 }

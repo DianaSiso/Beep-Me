@@ -1,8 +1,20 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+//import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/gestures.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'elements/elements.dart';
 import 'dart:developer';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import 'elements/orderCard.dart';
+import 'models/Order.dart';
+import "package:dart_amqp/dart_amqp.dart";
 
 void main() {
   runApp(const MyApp());
@@ -44,15 +56,6 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -66,6 +69,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     const Color(0xff02d39a),
   ];
 
+  String code = '';
+  final qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? barcode;
+  bool codeRead = false;
+
+  List ordersCode = [];
+  List orders = [];
+  List ordersCodeNotified = [];
+  Client client =
+      Client(settings: ConnectionSettings(host: "deti-engsoft-02.ua.pt"));
+  String queueTag = "notifications";
+  late Consumer consumer;
+
+  QRViewController? qrViewController;
+
   bool showAvg = false;
   String dropdownValue = "Mcdonalds";
   List<String> restaurantes = [
@@ -78,14 +96,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ];
 
   void _changePage(int index) {
-    log(index.toString());
-    log(page.toString());
     setState(() {
       page = index;
+      if (index == 1) {
+        codeRead = false;
+      }
     });
   }
 
-  Widget _displayPage() {
+  Widget _displayPage(BuildContext context) {
     switch (page) {
       case 0:
         {
@@ -93,7 +112,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       case 1:
         {
-          return Container();
+          if (codeRead) {
+            return homePage();
+          } else {
+            return qrcodePage(context);
+          }
         }
       case 2:
         {
@@ -106,28 +129,243 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  late AnimationController controller;
-
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat(reverse: true);
     super.initState();
+    //initMessageQueue();
+    getCachedOrders();
+    Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        getOrders();
+        writeOrders();
+        getNotification();
+      });
+    });
+  }
+
+  void initMessageQueue() async {
+    Channel channel = await client.channel();
+    Queue queue = await channel.queue(queueTag);
+    Consumer consumer = await queue.consume();
+    consumer.listen((AmqpMessage event) {
+      log(event.payloadAsString);
+      log("Running!");
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text("Order Ready"),
+                content: Text(event.payloadAsString),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "OK!",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      )),
+                ],
+              ));
+    });
+    client.close();
+  }
+
+  void getNotification() async {
+    Channel channel = await client.channel();
+    Queue queue = await channel.queue(queueTag, durable: true);
+    Consumer consumer = await queue.consume();
+    consumer.listen((AmqpMessage event) {
+      Map<String, dynamic> order = event.payloadAsJson as Map<String, dynamic>;
+      if (!ordersCodeNotified.contains(order["code"])) {
+        ordersCodeNotified.toList();
+        ordersCodeNotified.add(order["code"]);
+        String state = order["state"];
+        state = "${state[0].toUpperCase()}${state.substring(1).toLowerCase()}";
+        String restName = order["restaurantName"];
+        restName =
+            "${restName[0].toUpperCase()}${restName.substring(1).toLowerCase()}";
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text("Your order is ready!"),
+                  content: Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.blueGrey[400],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 15,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Text(
+                                  restName,
+                                  style: TextStyle(
+                                      fontSize: restName.length > 10 ? 15 : 25),
+                                ),
+                              ),
+                              Container(
+                                  child: Text(
+                                order["orderID"].toString(),
+                                style: TextStyle(
+                                    fontSize: restName.length > 10 ? 15 : 20),
+                              ))
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.green[300],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 15,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Text(state.toString())),
+                        )
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          )),
+                    ),
+                  ],
+                ));
+      }
+    });
+    client.close();
+  }
+
+  void getOrders() {
+    if (ordersCode.isNotEmpty) {
+      for (String code in ordersCode) {
+        fetchOrderInfo(code).then((result) {
+          if (result != null) {
+            int index = orders
+                .indexWhere((element) => element.getCode() == result.getCode());
+            if (index == -1) {
+              if (!(result.getState() == "NON_DELIVERED")) {
+                orders = orders.toList();
+                orders.add(result);
+              } else {
+                ordersCode.remove(code);
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text("Order passed the delivery time!"),
+                          content: Column(
+                            children: [
+                              Text("Restaurant: " +
+                                  result.getRestaurant()[0].toUpperCase() +
+                                  result
+                                      .getRestaurant()
+                                      .substring(1)
+                                      .toLowerCase()),
+                              Text("Order code: " + result.getCode()),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  "OK!",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
+                                )),
+                          ],
+                        ));
+              }
+            } else {
+              orders[index] = result;
+            }
+          } else {
+            ordersCode.remove(code);
+          }
+        });
+      }
+    }
+  }
+
+  Future<void> getCachedOrders() async {
+    if (await Permission.storage.request().isGranted) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
+      File file = File(appDocPath + "/cahedOrders.txt");
+      bool exists = await file.exists();
+      if (exists) {
+        List<String> codes = await file.readAsLines();
+        for (String order in codes) {
+          if (!ordersCode.contains(order)) {
+            ordersCode.toList();
+            ordersCode.add(order);
+          }
+        }
+      } else {
+        file.create();
+      }
+    }
+  }
+
+  Future<void> writeOrders() async {
+    if (await Permission.storage.request().isGranted) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
+      // FileInfo? cache;
+      File file = File(appDocPath + "/cahedOrders.txt");
+
+      List<String> codes = await file.readAsLines();
+      // for (String order in codes) {
+      //   log(order);
+      // }
+
+      for (String code in ordersCode) {
+        if (!codes.contains(code)) {
+          file.writeAsString(code + '\n', mode: FileMode.append);
+        }
+      }
+    }
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    qrViewController?.dispose();
     super.dispose();
   }
 
-  // This method is rerun every time setState is called, for instance as done
-  // by the _incrementCounter method above.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,8 +373,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         preferredSize: const Size.fromHeight(70.0),
         child: appBar(widget.title),
       ),
-      body: _displayPage(),
-      bottomNavigationBar: bottomAppBar(),
+      body: _displayPage(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _changePage(1);
@@ -145,8 +382,208 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: const Icon(Icons.add, size: 35),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation
-          .centerDocked, // This trailing comma makes auto-formatting nicer for build methods.
+          .endFloat, // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Widget homePage() {
+    return Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            //shoopingNameCard(),
+            const Padding(
+              padding: EdgeInsets.only(left: 30, bottom: 5),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Orders",
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Order order = orders[index];
+                  return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: const Color(0xff344966),
+                          // gradient: const LinearGradient(
+                          //   begin: Alignment.bottomLeft,
+                          //   end: Alignment.topRight,
+                          //   colors: [
+                          //     Color(0xffB4CDED),
+                          //     Color(0xff0D1821),
+                          //   ],
+                          // )
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 15,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ]),
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                        left: 20,
+                        right: 20,
+                      ),
+                      height: 200,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                titleNameRestaurant(order.getRestaurant()),
+                                numOrder(order.getOrderNumber().toString())
+                              ],
+                            ),
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                          //   child: Container(
+                          //     child: const LinearProgressIndicator(
+                          //       value: m,
+                          //       valueColor:
+                          //           AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+                          //     ),
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                stateOrder(order.getState()),
+                                Container(
+                                    margin: const EdgeInsets.only(right: 20),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xffB4CDED),
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        _removeOrder(index);
+                                      },
+                                      icon: const Icon(Icons.done_rounded),
+                                    ))
+                              ],
+                            ),
+                          )
+                        ],
+                      ));
+                },
+              ),
+            )
+          ],
+        ));
+  }
+
+  void removeFromCache() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    // FileInfo? cache;
+    File file = File(appDocPath + "/cahedOrders.txt");
+
+    List<String> codes = await file.readAsLines();
+    // for (String order in codes) {
+    //   log(order);
+    // }
+    file.delete();
+    for (String code in ordersCode) {
+      file.writeAsString(code + '\n', mode: FileMode.append);
+    }
+  }
+
+  void _removeOrder(int index) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Removing order..."),
+              content:
+                  const Text("Are you sure you want to remove this order?"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        Order order = orders.removeAt(index);
+                        ordersCode.removeWhere(
+                            (element) => order.getCode() == element);
+                        removeFromCache();
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "YES",
+                      style: TextStyle(color: Colors.red[400], fontSize: 18),
+                    )),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "NO",
+                      style: TextStyle(color: Colors.green[400], fontSize: 18),
+                    ))
+              ],
+            ));
+  }
+
+  Widget qrcodePage(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        qrcode(context),
+        Positioned(
+          bottom: 10,
+          child: buildResult(),
+        )
+      ],
+    );
+  }
+
+  Widget buildResult() => Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8), color: Colors.white24),
+      child: Text(
+        barcode != null ? 'Result :  ${barcode!.code}' : 'Scan a code!',
+        maxLines: 3,
+      ));
+
+  Widget qrcode(BuildContext context) => QRView(
+        key: qrKey,
+        onQRViewCreated: onQRViewCreated,
+        overlay: QrScannerOverlayShape(
+            borderWidth: 10,
+            borderRadius: 10,
+            borderLength: 20,
+            cutOutSize: MediaQuery.of(context).size.width * 0.8),
+      );
+
+  void onQRViewCreated(QRViewController controller) {
+    setState(() {
+      qrViewController = controller;
+    });
+    qrViewController?.scannedDataStream.listen((barcode) {
+      if (!ordersCode.contains(barcode.code!)) {
+        ordersCode = ordersCode.toList();
+        ordersCode.add(barcode.code!);
+      }
+      setState(() {
+        codeRead = true;
+        getOrders();
+      });
+    });
   }
 
   Widget bottomAppBar() {
@@ -172,27 +609,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
     );
-  }
-
-  Widget homePage() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-            shoopingNameCard(),
-            const Padding(
-              padding: EdgeInsets.only(left: 30, bottom: 5),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Orders",
-                  style: TextStyle(fontSize: 30),
-                ),
-              ),
-            ),
-            pedidosCard(2, controller)
-          ],
-        ));
   }
 
   Widget chartPage() {
