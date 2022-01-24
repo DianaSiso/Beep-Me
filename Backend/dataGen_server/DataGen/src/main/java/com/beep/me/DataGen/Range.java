@@ -57,7 +57,6 @@ public class Range {
         }
 
         double r = Math.random();
-        System.out.println("R: " + r);
         return r < prob;
 
 

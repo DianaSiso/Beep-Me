@@ -27,6 +27,7 @@ import server.beep.me.beepme.Forms.DelayedForm;
 import server.beep.me.beepme.Forms.LoginForm;
 import server.beep.me.beepme.Forms.LoginResponseForm;
 import server.beep.me.beepme.Forms.OrderForm;
+import server.beep.me.beepme.Forms.OrderMobile;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Forms.UserForm;
@@ -64,6 +65,22 @@ public class Beep_Me_Endpoints {
             resp.setRest_id(-1);
             resp.setManager(-1);
             return resp;
+        }
+    }
+
+    @RequestMapping(value = "/orders/code", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OrderMobile orders_by_code(@RequestParam(name = "code") String code) {
+        
+        if (code == null) {
+            return new OrderMobile();
+        }
+        OrderMobile order = backend.getOrderByCode(code);
+
+        if (order == null) {
+            return new OrderMobile();
+        } else {
+            return order;
         }
     }
 

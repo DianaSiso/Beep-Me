@@ -120,7 +120,13 @@ public class DataGen {
 
             
         // }
+        
         String restaurant = chooseOnWeight(restaurants);
+        // if (rest.equals("32")) {
+        //     restaurant = chooseOnWeight(restaurants);
+        // } else {
+        //     restaurant = rest;
+        // }
         String duration = chooseOnWeight(dur);
 
         LocalDateTime date = LocalDateTime.now();

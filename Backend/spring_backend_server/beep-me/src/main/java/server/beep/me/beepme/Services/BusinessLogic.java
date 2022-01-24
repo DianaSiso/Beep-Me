@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,11 @@ import server.beep.me.beepme.Forms.DelayedForm;
 import server.beep.me.beepme.Forms.LoginForm;
 import server.beep.me.beepme.Forms.LoginResponseForm;
 import server.beep.me.beepme.Forms.OrderForm;
+import server.beep.me.beepme.Forms.OrderMobile;
 import server.beep.me.beepme.Forms.RestForm;
 import server.beep.me.beepme.Forms.StateForm;
 import server.beep.me.beepme.Forms.UserForm;
+import server.beep.me.beepme.MessageQueue.MQConfig;
 import server.beep.me.beepme.MessageQueue.OrderMessage;
 import server.beep.me.beepme.Respositories.OrdersRepository;
 import server.beep.me.beepme.Respositories.RestaurantsRepository;
@@ -42,6 +45,10 @@ public class BusinessLogic {
 
     @Autowired
     OrdersRepository ordersRepository;
+
+    @Autowired
+    private RabbitTemplate template;
+    
 
     public boolean verifyUser(String username, String pwd) {
 
@@ -96,55 +103,84 @@ public class BusinessLogic {
         return resp;
     }
 
+    public OrderMobile getOrderByCode(String code) {
+        Order order = ordersRepository.findByCode(code);
+
+        if (order == null) {
+            return new OrderMobile();
+        }
+        updateOrder(order);
+        Restaurant rest = order.getRestaurant();
+        OrderMobile orderMobile = new OrderMobile(order.getCode(), order.getId(), rest.getId(), rest.getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
+        return orderMobile;
+    }
+
+    public void sendNotification(Order order) {
+        OrderMobile toSendOrder = new OrderMobile(order.getCode(), order.getId(), order.getRestaurant().getId(), order.getRestaurant().getName(), order.getPossibleDeliveryTime().toString(), order.getState().toString());
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY_NOTIFICATION, toSendOrder);
+    }
+
+    public boolean updateOrder(Order order) {
+        LocalDateTime delivereDateTime = order.getPossibleDeliveryTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        Duration duration = Duration.between(now, delivereDateTime);
+        long diff = duration.toMinutes();
+        if (order.getState().toString().equals(State.DELIVERED.toString())) {
+            if (diff < -10) {
+                return false;
+            }
+            return true;
+        } else if (order.getState().toString().equals(State.READY.toString())) {
+            Duration durationReady = Duration.between(now, delivereDateTime);
+            durationReady.plusMinutes(30);
+            long diffReady = durationReady.toMinutes();
+            if (diffReady < 0) {
+                order.setState(State.NON_DELIVERED);
+                Order saved_order = ordersRepository.save(order);
+                if (saved_order == null) {
+                    System.out.println("NON DELIVERED NOT SAVED");
+                }
+                return false;
+            } else {
+                sendNotification(order);
+                return true;
+            }
+        } else if (order.getState().toString().equals(State.ORDERED.toString()))  {   
+            if (diff < 0) {
+                delivereDateTime.plusMinutes(5);
+                order.setState(State.LATE);
+                order.setLate(true);
+                order.setPossibleDeliveryTime(delivereDateTime);
+                Order saved_order = ordersRepository.save(order);
+                order = saved_order;
+            }
+            return true;
+        } else if(order.getState().toString().equals(State.LATE.toString())) {
+            if (diff < -20) {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public ArrayList<Order> getOrdersByRestID(Integer id) {
         Optional<Restaurant> rest_opt = restRepository.findById(id);
 
         if (rest_opt.isPresent()){
             Restaurant rest = rest_opt.get();
             List<Order> orders = ordersRepository.findByRestaurant(rest, Sort.unsorted());
-
+            
             ArrayList<Order> toReturn = new ArrayList<>();
             for (Order order : orders) {
-                LocalDateTime delivereDateTime = order.getPossibleDeliveryTime();
-                LocalDateTime now = LocalDateTime.now();
-
-                Duration duration = Duration.between(now, delivereDateTime);
-                long diff = duration.toMinutes();
-                System.out.println(diff);
-                if (order.getState().toString().equals(State.DELIVERED.toString())) {
-                    
-                    if ( diff <= 10) {
-                        toReturn.add(order);
-                    }
-                } else if (order.getState().toString().equals(State.READY.toString())) {
-                    Duration durationReady = Duration.between(now, delivereDateTime);
-                    durationReady.plusMinutes(30);
-                    long diffReady = duration.toMinutes();
-                    if (diffReady < 0) {
-                        order.setState(State.NON_DELIVERED);
-                        Order saved_order = ordersRepository.save(order);
-                        if (saved_order == null) {
-                            System.out.println("NON DELIVERED NOT SAVED");
-                        }
-                    } else {
-                        toReturn.add(order);
-                    }
-                } else if (order.getState().toString().equals(State.NON_DELIVERED.toString())) {
-                    continue;
-                } else {   
-                    if (diff < 0) {
-                        delivereDateTime.plusMinutes(5);
-                        order.setState(State.LATE);
-                        order.setLate(true);
-                        order.setPossibleDeliveryTime(delivereDateTime);
-                        Order saved_order = ordersRepository.save(order);
-                        order = saved_order;
-                    }
+                boolean send = updateOrder(order);
+                if (send) {
                     toReturn.add(order);
-                }
+                } 
             }
-
-            return (ArrayList<Order>)orders;
+            return toReturn;
         } else {
             return null;
         }
@@ -282,9 +318,8 @@ public class BusinessLogic {
         if (users.isEmpty()) {
             User user = new User(userForm.getUsername(), userForm.getPassword(), manager);
             User saved_user = userRepository.save(user);
-            if (userForm.getManager() == "false") {
+            if (userForm.getManager().equals("false")) {
                 List<Restaurant> rests = restRepository.findByName(userForm.getUsername());
-
                 if (rests.isEmpty()) {
                     Restaurant to_save = new Restaurant(userForm.getUsername(), saved_user.getId());
                     Restaurant saved_rest = restRepository.save(to_save);

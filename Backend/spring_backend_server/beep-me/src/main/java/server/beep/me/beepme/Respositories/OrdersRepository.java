@@ -16,5 +16,7 @@ public interface OrdersRepository extends CrudRepository<Order, Integer>{
     List<Order> findByRestaurant(Restaurant rest, Sort sort);
     List<Order> findByState(State state);
     List<Order> findByOrderedTime(LocalDateTime orderedTime);
+    Order findByCode(String code);
+    
 
 }

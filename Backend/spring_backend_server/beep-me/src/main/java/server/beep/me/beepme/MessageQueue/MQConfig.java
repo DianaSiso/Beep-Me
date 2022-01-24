@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,12 +17,19 @@ import org.springframework.context.annotation.Configuration;
 public class MQConfig {
 
     public static final String ROUTING_KEY = "beep-me";
+    public static final String ROUTING_KEY_NOTIFICATION = "beep-me-notification";
     public static final String EXCHANGE = "message_exchange";
     public static final String QUEUE = "orders";
+    public static final String NOTIFICATIONS = "notifications";
 
     @Bean
     public Queue queue() {
         return new Queue(QUEUE);
+    }
+
+    @Bean
+    public Queue notificationQueue() {
+        return new Queue(NOTIFICATIONS);
     }
 
     @Bean
@@ -30,11 +38,19 @@ public class MQConfig {
     }
     
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
+    public Binding binding(@Qualifier("queue") Queue queue, TopicExchange exchange) {
         return BindingBuilder
         .bind(queue)
         .to(exchange)
         .with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingNotifications(@Qualifier("notificationQueue") Queue queue, TopicExchange exchange) {
+        return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(ROUTING_KEY_NOTIFICATION);
     }
 
     @Bean

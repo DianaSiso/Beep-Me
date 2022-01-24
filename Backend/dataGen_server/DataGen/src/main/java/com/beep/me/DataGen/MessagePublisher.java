@@ -22,22 +22,23 @@ public class MessagePublisher {
 
     private static Range range = new Range();
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 5000)
     @GetMapping("/publish")
     public String publishOrder() {
-
-        if (range.getProbability(LocalDateTime.now().getHour())){
-
-            System.out.println(rest);
+        boolean send = range.getProbability(LocalDateTime.now().getHour());
+        System.out.println("SENDING: " + send);
+        if (send){
         
             DataGen dataGen = new DataGen();
 
             Order toSendOrder  = dataGen.getOrder();
-
+            System.out.println(toSendOrder.getRestaurant());
             template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, toSendOrder);
 
+            System.out.print("Order Published!");
             return "Order Published!";
         }
+        System.out.print("Order not Published!");
         return "Order not published";
 
     }
