@@ -60,7 +60,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DragDropModule,
     HttpClientModule,
     RouterModule,
-    NgbModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

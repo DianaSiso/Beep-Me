@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
+
 import { HttpClient,HttpClientJsonpModule } from '@angular/common/http';
 
 
@@ -9,6 +10,7 @@ import { HttpClient,HttpClientJsonpModule } from '@angular/common/http';
   styleUrls: ['./charts.component.css']
 })
 export class ChartsComponent implements OnInit {
+
 
 
   months = ['Jan','Feb','Mar','Apr','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -311,8 +313,10 @@ export class ChartsComponent implements OnInit {
 
         },
       }));
+
     });
   }
+
 
 
 
@@ -320,7 +324,6 @@ export class ChartsComponent implements OnInit {
     this.fetchTotalOrders();
     this.fetchDelivered();
   }
-
 
 
 

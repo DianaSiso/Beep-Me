@@ -10,6 +10,9 @@ export class ChoiceComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    console.log(localStorage.getItem('restID'))
+
   }
 
 }

@@ -28,7 +28,6 @@ import { SICComponent } from './restaurants/SIC';
 import { SUNComponent } from './restaurants/SUN';
 import { ZEDComponent } from './restaurants/ZED';
 
-
 const routes: Routes = [
   {path: '', component:LoginComponent},
   {path: 'restaurant-component', component:RestaurantComponent},
@@ -36,6 +35,7 @@ const routes: Routes = [
   {path: 'task-component', component:TaskComponent},
   {path: 'task-dialog-component', component:TaskDialogComponent},
   {path: 'charts-component', component:ChartsComponent},
+
   {path: 'choice', component:ChoiceComponent},
   {path:'charts-component',component:ChartsComponent},
   {path:'restaurants-component',component:RestaurantsComponent},
@@ -61,7 +61,7 @@ const routes: Routes = [
   
 ];
 
-      
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
