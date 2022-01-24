@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
   pwd: string | undefined;
   username: string | undefined;
   state="";
-
   constructor(private httpClient:HttpClient,public router: Router) {
    }
   user(event:any) {this.username = event.target.value;}
   pswd(event:any) {this.pwd = event.target.value;}
 
   verifyLogin():void{
+
     this.httpClient.post<any>("http://deti-engsoft-02.ua.pt:8080/login",{username:this.username,password:this.pwd}).subscribe(response=>{console.log(response);
     if(response.status=="OK"){
       if(response.manager=="0"){
@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.state="";
     setInterval(()=>{this.state="";},5000);
+
   }
 
 }
