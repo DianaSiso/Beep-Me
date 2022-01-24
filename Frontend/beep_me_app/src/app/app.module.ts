@@ -27,6 +27,25 @@ import { ChartsComponent } from './charts/charts.component';
 import { RouterModule } from '@angular/router'
 import { RestaurantsComponent } from './restaurants';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MCDComponent } from './restaurants/MCD';
+import { AGUComponent } from './restaurants/AGU';
+import { AKIComponent } from './restaurants/AKI';
+import { ALIComponent } from './restaurants/ALI';
+import { BICComponent } from './restaurants/BIC';
+import { CAFComponent } from './restaurants/CAF';
+import { CASComponent } from './restaurants/CAS';
+import { DOMComponent } from './restaurants/DOM';
+import { H3Component } from './restaurants/H3';
+import { HUMComponent } from './restaurants/HUM';
+import { KFCComponent } from './restaurants/KFC';
+import { OITComponent } from './restaurants/OIT';
+import { PAOComponent } from './restaurants/PAO';
+import { PATComponent } from './restaurants/PAT';
+import { SICComponent } from './restaurants/SIC';
+import { SUNComponent } from './restaurants/SUN';
+import { TACComponent } from './restaurants/TAC';
+import { VITComponent } from './restaurants/VIT';
+import { ZEDComponent } from './restaurants/ZED';
 
 @NgModule({
   declarations: [
@@ -40,9 +59,47 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RestDialogComponent2,
     ChoiceComponent,
     ChartsComponent,
-    RestaurantsComponent
+    RestaurantsComponent,
+    AGUComponent,
+    AKIComponent,
+    ALIComponent,
+    BICComponent,
+    CAFComponent,
+    CASComponent,
+    DOMComponent,
+    H3Component,
+    HUMComponent,
+    KFCComponent,
+    MCDComponent,
+    OITComponent,
+    PAOComponent,
+    PATComponent,
+    SICComponent,
+    SUNComponent,
+    TACComponent,
+    VITComponent,
+    ZEDComponent
 
   ],
+  exports: [RestaurantsComponent, AGUComponent,
+    AKIComponent,
+    ALIComponent,
+    BICComponent,
+    CAFComponent,
+    CASComponent,
+    DOMComponent,
+    H3Component,
+    HUMComponent,
+    KFCComponent,
+    MCDComponent,
+    OITComponent,
+    PAOComponent,
+    PATComponent,
+    SICComponent,
+    SUNComponent,
+    TACComponent,
+    VITComponent,
+    ZEDComponent],
   entryComponents: [RestDialogComponent],
   imports: [
     BrowserModule,
