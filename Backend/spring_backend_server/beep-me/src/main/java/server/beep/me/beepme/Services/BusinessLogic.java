@@ -569,8 +569,8 @@ public class BusinessLogic {
             Restaurant restaurant = rest.get();
             List<Order> orders = ordersRepository.findByRestaurant(restaurant, Sort.unsorted());
             int count = 0;
-            ArrayList<Order> list = new ArrayList<>();
-            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) list.add(order);
+            //ArrayList<Order> list = new ArrayList<>();
+            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) count ++;
             map_to_return.put(restaurant.getName(), count);
         }
         
@@ -587,8 +587,8 @@ public class BusinessLogic {
         for (Restaurant rest: restaurants) {
             List<Order> orders = ordersRepository.findByRestaurant(rest, Sort.unsorted());
             int count = 0;
-            ArrayList<Order> list = new ArrayList<>();
-            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) list.add(order);
+            //ArrayList<Order> list = new ArrayList<>();
+            for (Order order : orders) if ((order.getState().equals(State.NON_DELIVERED))) count ++;
             map_to_return.put(rest.getName(), count);
         }
 
