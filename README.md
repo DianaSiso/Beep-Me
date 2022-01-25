@@ -78,12 +78,12 @@ open https://localhost:4200/ on browser
 
 ## Team
 
-| Nome             | Nmec   |
-| ---------------- | ------ |
-| Andreia Portela  | 97953  |
-| Diana Siso       | 98607  |
-| Miguel Marques   | 100850 |
-| Ricardo Ferreira | 98411  |
+| Nome             | Nmec   | Role |
+| ---------------- | ------ | -----|
+| Andreia Portela  | 97953  | Team manager & developer|
+| Diana Siso       | 98607  | Product owner & developer |
+| Miguel Marques   | 100850 | Architect & developer|
+| Ricardo Ferreira | 98411  | DevOps master & developer|
 
 ## Bookmarks
 
