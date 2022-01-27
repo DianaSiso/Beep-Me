@@ -92,7 +92,7 @@ Open http://deti-engsoft-02.ua.pt:80/ on browser while connected to UA's VPN.
 
 ### Mobile application:
 
-- In the folder Frontend, there is a folder named apk, and inside the is an apk that can be installed to test the application.
+In the folder Frontend, there is a folder named apk, and inside the is an apk that can be installed to test the application.
 
 ## User Accounts
 
