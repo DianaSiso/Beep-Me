@@ -88,7 +88,7 @@ Open https://localhost:4200/ on browser
 
 ### Run web application remotely:
 
-Open https://deti-engsoft-02.ua.pt:80/ on browser while connected to UA's VPN.
+Open http://deti-engsoft-02.ua.pt:80/ on browser while connected to UA's VPN.
 
 ### Mobile application:
 
