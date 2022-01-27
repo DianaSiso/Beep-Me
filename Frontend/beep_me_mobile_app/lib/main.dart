@@ -84,17 +84,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   QRViewController? qrViewController;
 
-  bool showAvg = false;
-  String dropdownValue = "Mcdonalds";
-  List<String> restaurantes = [
-    "Mcdonalds",
-    "KFC",
-    "BurgerKing",
-    "PizzaHut",
-    "Pans",
-    "Kebab"
-  ];
-
   void _changePage(int index) {
     setState(() {
       page = index;
@@ -118,10 +107,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             return qrcodePage(context);
           }
         }
-      case 2:
-        {
-          return chartPage();
-        }
       default:
         {
           return homePage();
@@ -132,7 +117,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //initMessageQueue();
     getCachedOrders();
     Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
@@ -143,40 +127,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  void initMessageQueue() async {
-    Channel channel = await client.channel();
-    Queue queue = await channel.queue(queueTag);
-    Consumer consumer = await queue.consume();
-    consumer.listen((AmqpMessage event) {
-      log(event.payloadAsString);
-      log("Running!");
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text("Order Ready"),
-                content: Text(event.payloadAsString),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        "OK!",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                      )),
-                ],
-              ));
-    });
-    client.close();
-  }
-
   void getNotification() async {
     Channel channel = await client.channel();
     Queue queue = await channel.queue(queueTag, durable: true);
     Consumer consumer = await queue.consume();
     consumer.listen((AmqpMessage event) {
       Map<String, dynamic> order = event.payloadAsJson as Map<String, dynamic>;
-      if (!ordersCodeNotified.contains(order["code"])) {
+      if (!ordersCodeNotified.contains(order["code"]) &&
+          orders.contains(order["code"])) {
         ordersCodeNotified.toList();
         ordersCodeNotified.add(order["code"]);
         String state = order["state"];
@@ -374,13 +332,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: appBar(widget.title),
       ),
       body: _displayPage(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _changePage(1);
-        },
-        tooltip: 'Add Order',
-        child: const Icon(Icons.add, size: 35),
-      ),
+      floatingActionButton: page == 1
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () {
+                _changePage(1);
+              },
+              tooltip: 'Add Order',
+              child: const Icon(Icons.add, size: 35),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation
           .endFloat, // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -544,21 +504,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       children: <Widget>[
         qrcode(context),
         Positioned(
-          bottom: 10,
-          child: buildResult(),
-        )
+            bottom: 20,
+            left: 0,
+            child: IconButton(
+              icon: const Icon(
+                Icons.chevron_left_rounded,
+                size: 50,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  codeRead = true;
+                  _changePage(0);
+                });
+              },
+            ))
       ],
     );
   }
-
-  Widget buildResult() => Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: Colors.white24),
-      child: Text(
-        barcode != null ? 'Result :  ${barcode!.code}' : 'Scan a code!',
-        maxLines: 3,
-      ));
 
   Widget qrcode(BuildContext context) => QRView(
         key: qrKey,
@@ -608,310 +571,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               }),
         ],
       ),
-    );
-  }
-
-  Widget chartPage() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Align(
-          alignment: Alignment.center,
-          child: Text(
-            "Shooping Information",
-            style: TextStyle(fontSize: 30),
-          ),
-        ),
-        Row(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 25),
-              child: Text(
-                "Restaurant:",
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 20,
-                elevation: 16,
-                underline: Container(height: 2, color: Colors.black),
-                //style: const TextStyle(fontSize: 15),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownValue = newValue!;
-                  });
-                },
-                items:
-                    restaurantes.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-        Stack(
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1.50,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(18),
-                    ),
-                    color: Color(0xff232d37)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 18.0, left: 12.0, top: 34, bottom: 12),
-                  child: LineChart(
-                    showAvg ? avgData() : mainData(),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: SizedBox(
-                width: 60,
-                height: 34,
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showAvg = !showAvg;
-                    });
-                  },
-                  child: Text(
-                    'avg',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: showAvg
-                            ? Colors.white.withOpacity(0.5)
-                            : Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  LineChartData mainData() {
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          interval: 1,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 2:
-                return 'MAR';
-              case 5:
-                return 'JUN';
-              case 8:
-                return 'SEP';
-            }
-            return '';
-          },
-          margin: 8,
-        ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          interval: 1,
-          getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 1:
-                return '10k';
-              case 3:
-                return '30k';
-              case 5:
-                return '50k';
-            }
-            return '';
-          },
-          reservedSize: 32,
-          margin: 12,
-        ),
-      ),
-      borderData: FlBorderData(
-          show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
-          isCurved: true,
-          colors: gradientColors,
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            colors:
-                gradientColors.map((color) => color.withOpacity(0.3)).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 2:
-                return 'MAR';
-              case 5:
-                return 'JUN';
-              case 8:
-                return 'SEP';
-            }
-            return '';
-          },
-          margin: 8,
-          interval: 1,
-        ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 1:
-                return '10k';
-              case 3:
-                return '30k';
-              case 5:
-                return '50k';
-            }
-            return '';
-          },
-          reservedSize: 32,
-          interval: 1,
-          margin: 12,
-        ),
-        topTitles: SideTitles(showTitles: false),
-        rightTitles: SideTitles(showTitles: false),
-      ),
-      borderData: FlBorderData(
-          show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: true,
-          colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)!,
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)!,
-          ],
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(show: true, colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)!
-                .withOpacity(0.1),
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)!
-                .withOpacity(0.1),
-          ]),
-        ),
-      ],
     );
   }
 
