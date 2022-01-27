@@ -43,13 +43,13 @@ To make all of this happen, we had to integrate the data generated program in a 
 
 ### Run containers in the vm:
 
-- All the files are localted in the beep-me user, under the directory of REPO/Beep-me/
-- The frontend and the server, as well as the the database and message broker are turned on for being able to open the url of the frontend. The data generation is turned off because the is no need to generate data when that data will not be processed. 
+All the files are localted in the beep-me user, under the directory of REPO/Beep-me/
+The frontend and the server, as well as the the database and message broker are turned on for being able to open the url of the frontend. The data generation is turned off because the is no need to generate data when that data will not be processed. 
 - To start generating data run:
 ```sh
 sudo docker start beep-me-data-container
 ```
-- Just to be documented, below there is the commands to create and run each container.
+Just to be documented, below there is the commands to create and run each container.
 - To generate database and message broker image and run their containers:
 ```sh
 cd Backend/DB/
