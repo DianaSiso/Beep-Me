@@ -22,13 +22,13 @@ The system was implemented in **Spring Boot**, with a **MySQL** database, **rabb
 
 ## How to run
 
-### Run servers:
+### Run servers on VM:
 
 ```sh
 
 ```
 
-### Run web application:
+### Run web application localy:
 
 ```sh
 cd Frontend
@@ -38,13 +38,15 @@ npm install chart.js
 ng serve
 ```
 
-open https://localhost:4200/ on browser
+Open https://localhost:4200/ on browser
+
+### Run web application remotely:
+
+Open https://deti-engsoft-02.ua.pt:80/ on browser while connected to UA's VPN.
 
 ### Run mobile application:
 
-```sh
-
-```
+To run the mobile application, you need to download and install the APK available in this repository. 
 
 ## User Accounts
 
