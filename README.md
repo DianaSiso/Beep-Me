@@ -22,21 +22,21 @@ The system was implemented in **Spring Boot**, with a **MySQL** database, **Rabb
 
 ## Docker Containers
 
-Deployed in our Virtual Machine are the 5 modules of our system, wich one with his own **Docker** container. The containers names are (frontend: frontend_container, server:beep-me, message broker: rabbitMQContainer, database: db_db_1, data generation: beep-me-data-container).
+Deployed in our Virtual Machine are the 5 modules of our system, which one with his own **Docker** container. The containers names are (frontend: frontend_container, server:beep-me, message broker: rabbitMQContainer, database: db_db_1, data generation: beep-me-data-container).
 
-The main container is the container of the main Server. Is through this container that almost all the modules comunicate. To create this container we used the maven/spring command `./mvnw spring-boot:build-image` that creates an image of that maven project. This container is running in the port 9000.
+The main container is the container of the main Server. Is through this container that almost all the modules communicate. To create this container we used the maven/spring command `./mvnw spring-boot:build-image` that creates an image of that maven project. This container is running in the port 9000.
 
-Then we have 2 container that are created in the same docker compose, that are the **MySQL** container, that contains the database, and all the data, and the **RabbitMQ** message broker.
+Then we have 2 containers that are created in the same docker compose, that are the **MySQL** container, that contains the database, and all the data, and the **RabbitMQ** message broker.
 
-The Frontend is also in a container, in this case in a container that is running nginx. The image is build using a Dockerfile localed in the angular project directory, that at first creates an npm container, that generates all modules necessary for the angular app and builds the project generating the "artifacts". Then this files are copied over to the nginx container.
+The Frontend is also in a container, in this case in a container that is running nginx. The image is built using a Dockerfile located in the angular project directory. In that Dockerfile we programmed it to at first create an npm container, that generates all the modules necessary for the angular app and then builds the project generating the "artifacts". Then these files that were created are copied over to the nginx container, the environment where the server is run.
 
 The Data Generation container is build the same way as the main Serve, we use the maven/spring command `./mvnw spring-boot:build-image` to create the image.
 
 ## Data Generation
 
 In terms of data generation, our goal was to simulate the behavior of the real orders that are created when the client makes an order at the counter. 
-To do so, we developed a java program that creates an order based on the time of day and the restaurant in case, if the time of day is less agitated, an order will be less likely to be created. We assigned a probability to each restaurant to make sure that bigger and more popular restaurants would have more orders than the others. The orders are published using a message broker. 
-This works by publishing an order in the message broker each time one is created. On the server side, it will be listening to new orders being added in a specific queue. When an order is generated, the server will "pick it up" and save it in the database. To make all of this happen, we had to integrate the data generated program in a Spring Boot application to be able to publish each order created to the message broker.
+To do so, we developed a java program that creates an order based on the time of day and the restaurant in case. If the time of day is less agitated, an order will be less likely to be created. We assigned a probability to each restaurant to make sure that bigger and more popular restaurants would have more orders than the others. The orders are published using a message broker. 
+This works by publishing an order in the message broker each time one is created. On the server side, it will be listening to new orders being added in a specific queue. When an order is added, the server will "pick it up" and save it in the database. To make all of this happen, we had to integrate the data generated program in a Spring Boot application to be able to publish each order created to the message broker.
 
 
 ## How to run
