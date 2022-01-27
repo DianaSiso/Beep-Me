@@ -18,18 +18,60 @@ For the development of our product, we will take inspiration from past experienc
 
 ## Technology stack
 
-The system was implemented in **Spring Boot**, with a **MySQL** database, **rabbit MQ** as a message broker and a data generation program written in **Java**. For the Beep Me application's user interface we used **Angular** [web application] and **Flutter** [mobile application available for Android and iOS].
+The system was implemented in **Spring Boot**, with a **MySQL** database, **RabbitMQ** as a message broker and a data generation program written in **Java**. For the Beep Me application's user interface we used **Angular** [web application] and **Flutter** [mobile application available for Android and iOS]. All our system modules are deployed in our virtual machine, and each one has its own **Docker** container. The containers names are (frontend: frontend_container, server:beep-me, message broker: rabbitMQContainer, database: db_db_1, data generation: beep-me-data-container).
+
+## Docker Containers
+
+Deployed in our Virtual Machine are the 5 modules of our system, wich one with his own **Docker** container. The containers names are (frontend: frontend_container, server:beep-me, message broker: rabbitMQContainer, database: db_db_1, data generation: beep-me-data-container).
+
+The main container is the container of the main Server. Is through this container that almost all the modules comunicate. To create this container we used the maven/spring command `./mvnw spring-boot:build-image` that creates an image of that maven project. This container is running in the port 9000.
+
+Then we have 2 container that are created in the same docker compose, that are the **MySQL** container, that contains the database, and all the data, and the **RabbitMQ** message broker.
+
+The Frontend is also in a container, in this case in a container that is running nginx. The image is build using a Dockerfile localed in the angular project directory, that at first creates an npm container, that generates all modules necessary for the angular app and builds the project generating the "artifacts". Then this files are copied over to the nginx container.
+
+The Data Generation container is build the same way as the main Serve, we use the maven/spring command `./mvnw spring-boot:build-image` to create the image.
+
 
 ## How to run
 
-### Run servers:
+### Run containers in the vm:
 
+- All the files are localted in the beep-me user, under the directory of REPO/Beep-me/
+- The frontend and the server, as well as the the database and message broker are turned on for being able to open the url of the frontend. The data generation is turned off because the is no need to generate data when that data will not be processed. 
+- To start generating data run:
 ```sh
-
+sudo docker start beep-me-data-container
+```
+- Just to be documented, below there is the commands to create and run each container.
+- To generate database and message broker image and run their containers:
+```sh
+cd Backend/DB/
+sudo docker-compose up -d
+```
+- To generate server image and run the container:
+```sh
+cd Backend/spring_backend_server/beep-me/
+chmod +x generateAndRunContainer.sh
+./generateAndRunContainer.sh
+```
+- To generate frontend image and run the container:
+```sh
+cd Frontend/beep_me_app/
+chmod +x generateAndRunContainer.sh
+./generateAndRunContainer.sh
+```
+- To generate the data generation image and run the container:
+```sh
+cd Frontend/beep_me_app/
+chmod +x generateAndRunContainer.sh
+./generateAndRunContainer.sh
 ```
 
-### Run web application:
+### Web application:
 
+- Remotely [Beep-Me](http://deti-engsoft-02.ua.pt:80)
+- To run localy:
 ```sh
 cd Frontend
 cd beep_me_app
@@ -37,14 +79,11 @@ npm install
 npm install chart.js
 ng serve
 ```
-
 open https://localhost:4200/ on browser
 
-### Run mobile application:
+### Mobile application:
 
-```sh
-
-```
+- In the folder Frontend, there is a folder named apk, and inside the is an apk that can be installed to test the application.
 
 ## User Accounts
 
@@ -87,6 +126,7 @@ open https://localhost:4200/ on browser
 
 ## Bookmarks
 
+- [Frontend Website](http://deti-engsoft-02.ua.pt:80)
 - [Report development](https://docs.google.com/document/d/1fu4VGWpGIC-uMgZ5bZGCmADkit5x35v22K9q8SeiTM8/edit?usp=sharing)
 - [Management board](https://projetoies.atlassian.net/jira/software/projects/IES/boards/1)
 - [API documentation](http://deti-engsoft-02.ua.pt:8080/swagger-ui.html#/)
