@@ -22,7 +22,7 @@ public class MessagePublisher {
 
     private static Range range = new Range();
 
-    @Scheduled(fixedRate = 5000)
+    //@Scheduled(fixedRate = 5000)
     @GetMapping("/publish")
     public String publishOrder() {
         boolean send = range.getProbability(LocalDateTime.now().getHour());
