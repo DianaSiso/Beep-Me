@@ -42,5 +42,16 @@ public class MessagePublisher {
         return "Order not published";
 
     }
+
+    @Scheduled(fixedRate = 5000)
+    @GetMapping("/publishOldOrders")
+    public void publishOldOrder() {
+        DataGen dataGen = new DataGen();
+
+        Order toSendOrder  = dataGen.getOldOrder();
+        System.out.println(toSendOrder.getRestaurant());
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY_OLD_ORDERS, toSendOrder);
+
+    }
     
 }

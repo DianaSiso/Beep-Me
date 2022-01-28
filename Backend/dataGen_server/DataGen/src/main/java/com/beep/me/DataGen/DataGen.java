@@ -97,6 +97,30 @@ public class DataGen {
 
     }
 
+    private HashMap<String, Double> getDurationDaysMap() {
+
+        HashMap<String, Double> dur = new HashMap<>();
+        dur.put("100", 0.1);
+        dur.put("150", 0.1);
+        dur.put("200", 0.1);
+        dur.put("250", 0.1);
+        dur.put("300", 0.1);
+        dur.put("350", 0.1);
+        dur.put("400", 0.1);
+        dur.put("450", 0.1);
+        dur.put("500", 0.1);
+        dur.put("550", 0.1);
+
+        double count = 0;
+        for (String r: dur.keySet()) {
+            Double v = dur.get(r);
+            count += v;
+        }
+
+        return dur;
+
+    }
+
 
     private String chooseOnWeight(HashMap<String, Double> items) {
         double completeWeight = 0.0;
@@ -130,6 +154,49 @@ public class DataGen {
         String duration = chooseOnWeight(dur);
 
         LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter minutesFormatter = DateTimeFormatter.ofPattern("mm");
+        
+
+        String formatDateTime = date.format(dateTimeFormatter);
+        String formatDate = date.format(dateFormatter);
+        String formatTime = date.format(timeFormatter);
+        String formatMinutes = date.format(minutesFormatter);
+
+        LocalDateTime pred = date.plusMinutes(Integer.parseInt(duration));
+        String predString = pred.format(dateTimeFormatter);
+        
+        String code = getAlphaNumericString(10);
+
+        Order order = new Order(code, restaurant, formatDateTime, predString);
+
+        return order;
+    }
+
+
+    public Order getOldOrder() {
+        HashMap<String, Double> restaurants = getRestMap();
+        HashMap<String, Double> dur = getDurationMap();
+        HashMap<String, Double> durDays = getDurationDaysMap();
+
+        // for (int i = 0 ; i < 23; i++) {
+
+            
+        // }
+        
+        String restaurant = chooseOnWeight(restaurants);
+        // if (rest.equals("32")) {
+        //     restaurant = chooseOnWeight(restaurants);
+        // } else {
+        //     restaurant = rest;
+        // }
+        String duration = chooseOnWeight(dur);
+        String durationDays = chooseOnWeight(durDays);
+
+        LocalDateTime date = LocalDateTime.now();
+        date = date.minusDays(Integer.parseInt(durationDays));
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");

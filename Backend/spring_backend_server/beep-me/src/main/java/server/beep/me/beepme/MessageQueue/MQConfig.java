@@ -18,9 +18,11 @@ public class MQConfig {
 
     public static final String ROUTING_KEY = "beep-me";
     public static final String ROUTING_KEY_NOTIFICATION = "beep-me-notification";
+    public static final String ROUTING_KEY_OLD_ORDERS = "old_orders";
     public static final String EXCHANGE = "message_exchange";
     public static final String QUEUE = "orders";
     public static final String NOTIFICATIONS = "notifications";
+    public static final String OLD_ORDERS = "old_orders";
 
     @Bean
     public Queue queue() {
@@ -30,6 +32,11 @@ public class MQConfig {
     @Bean
     public Queue notificationQueue() {
         return new Queue(NOTIFICATIONS);
+    }
+
+    @Bean
+    public Queue oldOrdersQueue() {
+        return new Queue(OLD_ORDERS);
     }
 
     @Bean
@@ -51,6 +58,14 @@ public class MQConfig {
         .bind(queue)
         .to(exchange)
         .with(ROUTING_KEY_NOTIFICATION);
+    }
+
+    @Bean
+    public Binding bindingOldOrders(@Qualifier("oldOrdersQueue") Queue queue, TopicExchange exchange) {
+        return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(ROUTING_KEY_OLD_ORDERS);
     }
 
     @Bean

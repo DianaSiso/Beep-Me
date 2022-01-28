@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -374,6 +375,46 @@ public class BusinessLogic {
         order.setOrderedTime(ordereDateTime);
         order.setPossibleDeliveryTime(previstedDateTime);
         order.setState(state);
+
+        Order savedOrder = ordersRepository.save(order);
+        return savedOrder;
+    }
+
+    public Order saveOldOrder(OrderMessage orderMessage) {
+        
+        ArrayList<State> states = new ArrayList<>();
+        states.add(State.DELIVERED);
+        states.add(State.DELIVERED);
+        states.add(State.DELIVERED);
+        states.add(State.NON_DELIVERED);
+        ArrayList<Boolean> lates = new ArrayList<>();
+        lates.add(Boolean.FALSE);
+        lates.add(Boolean.FALSE);
+        lates.add(Boolean.FALSE);
+        lates.add(Boolean.TRUE);
+
+        int islate = new Random().nextInt(lates.size());
+        int stateIndex = new Random().nextInt(states.size());
+        
+        String rest_name = orderMessage.getRestaurant().replace(" ", "").replace("'", "").toLowerCase();
+        System.out.println(rest_name);
+        List<Restaurant> rest = restRepository.findByName(rest_name);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+        LocalDateTime ordereDateTime = LocalDateTime.parse(orderMessage.getOrdered(), formatter);
+        LocalDateTime previstedDateTime = LocalDateTime.parse(orderMessage.getPrevisted(), formatter);
+        State state = states.get(stateIndex);
+        boolean late = lates.get(islate);
+
+        if (rest.isEmpty()) {
+            return null;
+        }
+        Order order = new Order();
+        order.setCode(orderMessage.getCode());
+        order.setRestaurant(rest.get(0));
+        order.setOrderedTime(ordereDateTime);
+        order.setPossibleDeliveryTime(previstedDateTime);
+        order.setState(state);
+        order.setLate(late);
 
         Order savedOrder = ordersRepository.save(order);
         return savedOrder;
