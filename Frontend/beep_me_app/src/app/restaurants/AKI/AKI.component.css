@@ -1,0 +1,17 @@
+.aligned{
+  margin: 1em;
+  width: 40%;
+}
+
+#restaurantStates{
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#restaurantMonth{
+  width: 80%;
+  margin: 0 auto;
+
+}
+
