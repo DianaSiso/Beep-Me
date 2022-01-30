@@ -5,11 +5,11 @@
 
 This project was developed in the context of [Introduction to Software Engineering](https://www.ua.pt/en/uc/12288) curricular unit, part of the Computer Science Bachelor at [Aveiro University](https://www.ua.pt/). It was lectured by professors [José Luis Guimarães Oliveira](https://www.ua.pt/pt/p/10309676) and [Ilídio Fernando de Castro Oliveira](https://www.ua.pt/en/p/10318398) during the 2020/2021 school year.
 
-We decided to develop a web application that will manage orders and deliveries of food in shopping food courts in order to reduce contagious contact and agglomeration and study how well is the food court running. In this application the customer will link its order to the application and when the order is ready the app will notify the client. The app will also produce information about orders, time of delivery and rush hours so that the food court managers can study statistics and create historic analysis.
+We decided to develop a web application that will manage orders and deliveries of food in shopping food courts in order to reduce contagious contact and agglomeration and study how well is the food court running. In this application the customer will link its order to the application and when the order is ready the app will notify the consumer. The app will also produce information about orders, time of delivery and rush hours so that the food court managers can study statistics and create historic analysis.
 
 The application will have 3 main parts:
 
-- _Client side_ where the client can scan a QRcode or insert a key present on his receipt and their phone will receive a notification when their order is ready.
+- _Consumer side_ where the client can scan a QRcode or insert a key present on his receipt and their phone will receive a notification when their order is ready.
 - _Restaurant side_ where the workers will register the client’s order (automatically if system is integrated) and indicate when the order is ready for pickup.
 - _Management side_ where analysts will receive data about which restaurants work better, the average time of delivery per restaurant and affluence hours
 
