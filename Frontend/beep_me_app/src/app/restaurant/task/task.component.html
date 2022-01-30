@@ -1,0 +1,11 @@
+<mat-card class="item" *ngIf="task" (dbclick)="edit.emit(task)">
+  <div
+    style="display: flex; flex-direction: row; justify-content: space-between"
+  >
+    <h2>Order {{ task.id }}</h2>
+    <div style="display: flex; flex-direction: column">
+      <p>{{ task.orderedTime.split("T")[0] }}</p>
+      <p>{{ task.orderedTime.split("T")[1] }}</p>
+    </div>
+  </div>
+</mat-card>
