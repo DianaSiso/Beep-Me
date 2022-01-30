@@ -34,7 +34,7 @@ The Data Generation container is build the same way as the main Serve, we use th
 
 ## Data Generation
 
-In terms of data generation, our goal was to simulate the behavior of the real orders that are created when the client makes an order at the counter. 
+In terms of data generation, our goal was to simulate the behavior of the real orders that are created when the consumer makes an order at the counter. 
 To do so, we developed a java program that creates an order based on the time of day and the restaurant in case. If the time of day is less agitated, an order will be less likely to be created. We assigned a probability to each restaurant to make sure that bigger and more popular restaurants would have more orders than the others. The orders are published using a message broker. 
 This works by publishing an order in the message broker each time one is created. On the server side, it will be listening to new orders being added in a specific queue. When an order is added, the server will "pick it up" and save it in the database. To make all of this happen, we had to integrate the data generated program in a Spring Boot application to be able to publish each order created to the message broker.
 
