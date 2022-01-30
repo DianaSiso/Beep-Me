@@ -17,31 +17,27 @@ export class PATComponent implements OnInit {
   restaurantOrders:Chart[]=[];
   pedidosStamp = new Map();
   statesMap = new Map();
+  map1 = new Map<string, string>();
   constructor(private httpClient:HttpClient){}
 
 
   
-   fetchRestStamps():void{
-    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080//orders/restaurant?rest_id=36').subscribe(res=>
+  fetchRestStamps():void{
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/restaurant/orders/perhour').subscribe(res=>
     {
-     for(let i= 0; i < res.length; i++){
-      var temp = res[i].orderedTime.split(":")[0];
-      if(this.pedidosStamp.has(temp)){ // +1
-          this.pedidosStamp.set(temp, this.pedidosStamp.get(temp) +1);
+        
+      for (var value in res.patronopizza) {  
+         this.map1.set(value,res.patronopizza[value])  
       }
-      else{ // = 1
-        this.pedidosStamp.set(temp,1);
-      }   
-     }
-     
+
      const restaurantMonth = new Chart('restaurantMonth', {
       type: 'bar',
       data: {
-        labels: Array.from(this.pedidosStamp.keys()),
+        labels: Array.from(this.map1.keys()),
         datasets: [
           {
             label:'Number of total orders per hour',
-            data:Array.from(this.pedidosStamp.values()),
+            data:Array.from(this.map1.values()),
             backgroundColor: 'rgba(0, 255, 0, 0.3)',
           },
         ]
@@ -56,6 +52,7 @@ export class PATComponent implements OnInit {
     });
     });
   }
+
 
    array1 = {'KFC':2,'H3':1};
 

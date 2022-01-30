@@ -17,31 +17,27 @@ export class AGUComponent implements OnInit {
   restaurantOrders:Chart[]=[];
   pedidosStamp = new Map();
   statesMap = new Map();
+  map1 = new Map<string, string>();
   constructor(private httpClient:HttpClient){}
 
 
   
    fetchRestStamps():void{
-    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080//orders/restaurant?rest_id=12').subscribe(res=>
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/restaurant/orders/perhour').subscribe(res=>
     {
-     for(let i= 0; i < res.length; i++){
-      var temp = res[i].orderedTime.split(":")[0];
-      if(this.pedidosStamp.has(temp)){ // +1
-          this.pedidosStamp.set(temp, this.pedidosStamp.get(temp) +1);
+        
+      for (var value in res.aguladoprego) {  
+         this.map1.set(value,res.aguladoprego[value])  
       }
-      else{ // = 1
-        this.pedidosStamp.set(temp,1);
-      }   
-     }
-     
+
      const restaurantMonth = new Chart('restaurantMonth', {
       type: 'bar',
       data: {
-        labels: Array.from(this.pedidosStamp.keys()),
+        labels: Array.from(this.map1.keys()),
         datasets: [
           {
             label:'Number of total orders per hour',
-            data:Array.from(this.pedidosStamp.values()),
+            data:Array.from(this.map1.values()),
             backgroundColor: 'rgba(0, 255, 0, 0.3)',
           },
         ]
@@ -56,8 +52,6 @@ export class AGUComponent implements OnInit {
     });
     });
   }
-
-   array1 = {'KFC':2,'H3':1};
 
    
   fetchTest():void{ //Mudar rest_id //
@@ -89,14 +83,13 @@ export class AGUComponent implements OnInit {
         scales: {
           y: {
             beginAtZero: true,
-          },
+          },    
         },
       },
     });
 
   });
 }
-
 
 
   ngOnInit(): void {

@@ -4,6 +4,7 @@ import Chart from 'chart.js/auto';
 import { HttpClient,HttpClientJsonpModule } from '@angular/common/http';
 
 
+
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
@@ -13,17 +14,17 @@ export class ChartsComponent implements OnInit {
 
 
 
-  months = ['Jan','Feb','Mar','Apr','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  
   delayed:Number[]=[];
   ABCchartF=[];
   totalOrders:number[]=[];
   restaurantsDeliveredchart:Chart[]=[];
-
+  avgTimeMap = new Map<string, string>();
   constructor(private httpClient:HttpClient){}
   
   fetchTotalOrders(){
     this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080//restaurant/total_orders').subscribe(res => {
-      //this.totalOrders.push(res.KFC);
+      this.totalOrders.push(res.kfc);
       this.totalOrders.push(res.aguladoprego);
       this.totalOrders.push(res.akigrill);
       this.totalOrders.push(res.alicarius);-
@@ -46,10 +47,9 @@ export class ChartsComponent implements OnInit {
       this.totalOrders.push(res.tasquinhadobacalhau);
       this.totalOrders.push(res.vitaminas);
       this.totalOrders.push(res.zedatripa);
-      
+
       var sum = 0;
       sum = this.totalOrders.reduce((acc, cur) => acc + cur, 0);
-
 
       for(let i = 0; i < this.totalOrders.length; i++){
         this.totalOrders[i] = (this.totalOrders[i] / sum) * 100;
@@ -64,114 +64,119 @@ export class ChartsComponent implements OnInit {
           datasets: [
             {
               data: [this.totalOrders[0]],
-              label:'A serca do Prego',
-              backgroundColor: ' rgb(255,0,0,0.4)',
+              label:'KFC',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[1]],
+              label:'A gula do Prego',
+              backgroundColor: 'lightseagreen',
+            },
+            {
+              data: [this.totalOrders[2]],
               label:'Aki Grill',
-              backgroundColor: 'rgb(0,0,255,0.4)',
+              backgroundColor: 'royalblue',
             },
             
             {
-              data: [this.totalOrders[2]],
-              label:'Alicarius',
-              backgroundColor: 'rgb(127,255,0,0.5)',
-            },
-            {
               data: [this.totalOrders[3]],
-              label:'Bica da ria',
-              backgroundColor: 'rgb(255,215,0,0.4)',
+              label:'Alicarius',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[4]],
-              label:'Caffelato',
-              backgroundColor: ' rgb(255,165,0,0.5)',
+              label:'Bica da ria',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[5]],
-              label:'Caseiro e Bom',
-              backgroundColor: ' rgb(255,0,0,0.4)',
+              label:'Caffelato',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[6]],
-              label:'Dom Franguito',
-              backgroundColor: 'rgb(0,0,255,0.4)',
+              label:'Caseiro e Bom',
+              backgroundColor: ' royalblue',
             },
             {
               data: [this.totalOrders[7]],
-              label:'H3',
-              backgroundColor: 'rgb(127,255,0,0.5)',
+              label:'Dom Franguito',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[8]],
-              label:'Hummy',
-              backgroundColor: 'rgb(255,215,0,0.4)',
+              label:'H3',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[9]],
-              label:'Italian Republic',
-              backgroundColor: 'rgb(255,165,0,0.5)',
+              label:'Hummy',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[10]],
-              label:'Malguinhas e Pregos',
-              backgroundColor: ' rgb(255,0,0,0.4)',
+              label:'Italian Republic',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[11]],
-              label:'Mania Poke Bowls',
-              backgroundColor: 'rgb(0,0,255,0.4)',
+              label:'Malguinhas e Pregos',
+              backgroundColor: ' lightseagreen',
             },
             {
               data: [this.totalOrders[12]],
-              label:'MC Donalds',
-              backgroundColor: 'rgb(127,255,0,0.5)',
+              label:'Mania Poke Bowls',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[13]],
-              label:'Oita',
-              backgroundColor: 'rgb(255,215,0,0.4)',
+              label:'MC Donalds',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[14]],
-              label:'Pão Divino',
-              backgroundColor: 'rgb(255,165,0,0.5)',
+              label:'Oita',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[15]],
-              label:'Patrono Pizza',
-              backgroundColor: ' rgb(255,0,0,0.4)',
+              label:'Pão Divino',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[16]],
-              label:'Sical',
-              backgroundColor: 'rgb(0,0,255,0.4)',
+              label:'Patrono Pizza',
+              backgroundColor: ' royalblue',
             },
             {
               data: [this.totalOrders[17]],
-              label:'Sun Bufê',
-              backgroundColor: 'rgb(127,255,0,0.5)',
+              label:'Sical',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[18]],
-              label:'Taco Bell',
-              backgroundColor: 'rgb(255,215,0,0.4)',
+              label:'Sun Bufê',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[19]],
-              label:'Tasquinha do Bacalhau',
-              backgroundColor: 'rgb(255,165,0,0.5)',
+              label:'Taco Bell',
+              backgroundColor: 'lightseagreen',
             },
             {
               data: [this.totalOrders[20]],
-              label:'Vitaminas',
-              backgroundColor: ' rgb(255,0,0,0.4)',
+              label:'Tasquinha do Bacalhau',
+              backgroundColor: 'royalblue',
             },
             {
               data: [this.totalOrders[21]],
+              label:'Vitaminas',
+              backgroundColor: ' lightseagreen',
+            },
+            {
+              data: [this.totalOrders[22]],
               label:'Zé da Tripa',
-              backgroundColor: 'rgb(0,0,255,0.4)',
+              backgroundColor: 'royalblue',
             },
           ],
         },
@@ -193,7 +198,7 @@ export class ChartsComponent implements OnInit {
             title: {
               display: true,
               text: 'Restaurants contributions'
-          }
+            },
           }
   
       }
@@ -206,9 +211,7 @@ export class ChartsComponent implements OnInit {
 
     this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080//restaurant/orders/notDelivered').subscribe(res=>
     {
-      console.log("Not Delivered--")
-      console.log(res);
-      this.delayed.push(res.KFC);
+      this.delayed.push(res.kfc);
       this.delayed.push(res.aguladoprego);
       this.delayed.push(res.akigrill);
       this.delayed.push(res.alicarius);
@@ -272,7 +275,7 @@ export class ChartsComponent implements OnInit {
             {
               label: 'Delivered',
               data: [
-                res.KFC,
+                res.kfc,
                 res.aguladoprego,
                 res.akigrill,
                 res.alicarius,
@@ -317,12 +320,46 @@ export class ChartsComponent implements OnInit {
     });
   }
 
+  fetchAvgTime():void{
+    this.httpClient.get<any>('http://deti-engsoft-02.ua.pt:8080/restaurant/orders/meanTime').subscribe(res=>
+    {
+      for (var value in res) {  
+        this.avgTimeMap.set(value,res[value])  
+     }
+
+
+
+    const avgTime = new Chart('avgTime', {
+     type: 'bar',
+     data: {
+       labels: Array.from(this.avgTimeMap.keys()),
+       datasets: [
+         {
+           label:'Average wait time per restaurant (Minutes)',
+           data:Array.from(this.avgTimeMap.values()),
+           backgroundColor: 'rgba(0, 255, 0, 0.3)',
+         },
+       ]
+     },
+     options: {
+       scales: {
+         y: {
+           beginAtZero: true,
+         },
+       },
+     },
+   });
+   });
+
+  }
+
 
 
 
   ngOnInit(): void {
     this.fetchTotalOrders();
     this.fetchDelivered();
+    this.fetchAvgTime();
   }
 
 
